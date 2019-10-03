@@ -1,4 +1,3 @@
-// Author: Martin Hag
 // Course: TNCG15, Advanced global illumination and rendering
 // Date: 2019-09-26 - 2019-10-03
 
@@ -12,8 +11,8 @@
 
 namespace CONSTANTS
 {
-	const int   screenSize_X = 600;
-	const int   screenSize_Y = 400;
+	const int   screenSize_X = 800;
+	const int   screenSize_Y = 800;
 }
 
 // Loop if i want to use it in main later. Code has to be in while loop to update.
@@ -49,7 +48,6 @@ void updateWindow(sf::RenderWindow &_window, sf::Sprite &_sprite, sf::Texture &_
 	_window.display();
 }
 
-
 /************************
 *			Main		*
 *************************/
@@ -69,13 +67,12 @@ int main()
 	sprite.setTextureRect(sf::IntRect(0, 0, CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y));    // the rectangle of the texture to use for this sprite
 	image.create(CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y, sf::Color::Cyan);
 
-
 	//Create scene with objects.
 	Scene scene = Scene();
 
-	//Camera in scene.
-	Camera camera = Camera(CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y, Camera::Eye::EYE_ONE);
-	
+	//Create camera in scene.
+	Camera camera = Camera(CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y, Camera::Eye::EYE_TWO);
+
 	int renderCounter = 0;
 	std::cout << "Starting rendering process\n";
 	for (int y = 0; y < CONSTANTS::screenSize_Y; y++) { //Vertical
@@ -106,7 +103,10 @@ int main()
 			renderCounter = 0;
 		}
 	}
+
+	updateWindow(window, sprite, texture, image);
 	std::cout << "Render Complete!\n";
+	loopUpdate(window, sprite);
 	int a;
 	std::cin >> a;
 }

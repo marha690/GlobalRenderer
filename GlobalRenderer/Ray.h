@@ -18,6 +18,7 @@ public:
 
 	Triangle *hitTriangle;
 
+	Vertex getDirection();
 
 	//Constructor
 	Ray(Vertex _startPoint, Vertex _endPoint);

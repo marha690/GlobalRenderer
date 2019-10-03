@@ -2,6 +2,11 @@
 #include "Ray.h"
 
 
+Vertex Ray::getDirection()
+{
+	return (end - start);
+}
+
 Ray::Ray(Vertex _startPoint, Vertex _endPoint)
 {
 	start = _startPoint;
