@@ -27,12 +27,11 @@ void Camera::createPixelRays(int x, int y)
 	double pixelWidth = (double(viewWidth) / double(pixelsHorizontaly));
 	double pixelHeight = (double(viewHeight) / double(pixelsVericaly));
 
-	Vertex pixelPosition = Vertex( 0, x*pixelWidth - (viewWidth / 2), y*pixelHeight - (viewHeight / 2));
+	Vertex pixelPosition = Vertex( 0, (viewWidth / 2) - x*pixelWidth, (viewHeight / 2) - y*pixelHeight);
 
 	//Create ray for the pixel
 	Ray *myRay = new Ray(startPosition, pixelPosition);
 
-
-	//connect the ray to that pixel.
+	//Connect the ray to that pixel.
 	pixels[x + pixelsVericaly * y].connectRay(myRay);
 }

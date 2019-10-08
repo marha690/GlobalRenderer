@@ -26,6 +26,7 @@ public:
 	~Triangle();
 
 	// rayIntersection. Computes the intersection between a Ray and the Triangle with Möller-Trumbore alghorithm.
-	Vertex rayIntersection(Ray &r, bool &hit);
-
+	bool rayIntersection(Ray &r, Vertex &hitTriangle);
+private:
+	double EPSILON = 0.0000001;
 };

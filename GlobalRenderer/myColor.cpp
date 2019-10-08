@@ -29,7 +29,8 @@ sf::Color myColor::toSFLinear(double min, double max)
 	return sf::Color((int)red, (int)green, (int)blue);
 }
 
-void myColor::print()
+std::ostream& operator<<(std::ostream& os, const myColor& c)
 {
-	std::cout << "Color:[" << r << ", " << g << ", " << b << "]\n";
+	os << "Color:[" << c.r << ", " << c.g << ", " << c.b << "]\n";
+	return os;
 }

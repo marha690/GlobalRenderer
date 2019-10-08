@@ -20,17 +20,17 @@ Triangle::~Triangle()
 
 
 // rayIntersection. Computes the intersection between a Ray and the Triangle with Möller-Trumbore alghorithm.
-Vertex Triangle::rayIntersection(Ray &r, bool &hit)
+bool Triangle::rayIntersection(Ray &r, Vertex &intersectionPoint)
 {
-	const double EPSILON = 0.0000001;
-
-	Vertex rayDirection = (r.end - r.start);
+	Vertex rayDirection = (r.end - r.start).normalize();
 
 	Vertex edge1 = v2 - v1;
 	Vertex edge2 = v3 - v1;
 
 	Vertex T, Q, P;
 	T = r.start - v1;
+
+	// Cross products.
 	P = rayDirection ^ edge2;
 	Q = T ^ edge1;
 
@@ -39,9 +39,8 @@ Vertex Triangle::rayIntersection(Ray &r, bool &hit)
 
 	a = P * edge1;
 
-	if (a > -EPSILON && a < EPSILON) {
-		hit = false;
-		return Vertex();
+	if ( std::abs(a) < EPSILON) {
+		return false;
 	}
 
 	f = 1.0 / a;
@@ -51,23 +50,25 @@ Vertex Triangle::rayIntersection(Ray &r, bool &hit)
 	v = (Q*rayDirection) * f;
 
 	if (u < 0.0 || u > 1.0) {
-		hit = false;
-		return Vertex();
+		return false;
 	}
 
 	if (v < 0.0 || u + v > 1.0) {
-		hit = false;
-		return Vertex();
+		return false;
 	}
 
 
-	if (v > EPSILON) { //Ray intersection!
+	if (t > EPSILON || t < 1/EPSILON) { //Ray intersection!
 		Vertex out = r.start + rayDirection * t;
-		hit = true;
-		return out;
+
+		intersectionPoint = out;
+
+		if ( t < 0)
+			return false; //Triangle is located oposite of our rays direction.
+
+		return true;
 	}
-	else { //This means there are a line intersecting but not the ray.
-		hit = false;
-		return Vertex();
+	else { //This means there are a line intersecting but not a ray intersection.
+		return false;
 	}
 }

@@ -16,8 +16,7 @@ public:
 	//Destructor
 	~Vertex();
 
-	//Print function, writes teh vertex coordinates to the console.
-	void print();
+	friend std::ostream& operator<<(std::ostream& os, const Vertex& v);
 
 	friend Vertex operator+(const Vertex &v1, const Vertex &v2);
 
@@ -33,4 +32,5 @@ public:
 	friend Vertex operator*(const Vertex &v1, const double &i);
 
 	double magnitude() const;
+	Vertex normalize();
 };

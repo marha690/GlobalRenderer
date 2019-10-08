@@ -24,7 +24,7 @@ public:
 	Ray(Vertex _startPoint, Vertex _endPoint);
 
 	void print();
-
+	friend std::ostream& operator<<(std::ostream& os, const Ray& v);
 	//Destructor
 	~Ray();
 };

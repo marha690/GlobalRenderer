@@ -2,12 +2,7 @@
 #include "Vertex.h"
 
 #include <iostream>
-
-
-
-/********************************
-*			Vector class		*
-********************************/
+#include <cmath>
 
 
 
@@ -32,10 +27,11 @@ Vertex::~Vertex()
 {
 }
 
-//Print function, writes the vertex coordinates to the console.
-void Vertex::print()
+
+std::ostream& operator<<(std::ostream& os, const Vertex& v)
 {
-	std::cout << "( " << x << ", " << y << ", " << z << " )" << std::endl;
+	os << "( " << v.x << ", " << v.y << ", " << v.z << " )\n";
+	return os;
 }
 
 Vertex operator+(const Vertex &v1, const Vertex &v2)
@@ -87,4 +83,10 @@ Vertex operator*(const Vertex &v1, const double &i)
 double Vertex::magnitude() const
 {
 	return sqrt(x*x + y * y + z * z);
+}
+
+Vertex Vertex::normalize()
+{
+	float length = std::sqrt(x*x + y*y + z*z);
+	return Vertex(x/length, y/length, z/length);
 }

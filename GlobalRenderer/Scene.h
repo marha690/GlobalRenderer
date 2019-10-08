@@ -6,9 +6,6 @@
 //Forward declaration
 class Trinagle;
 
-/********************************
-*			Scene.h			*
-********************************/
 class Scene
 {
 public:

@@ -14,10 +14,10 @@ public:
 	//Destructor
 	~myColor();
 
+	friend std::ostream& operator<<(std::ostream& os, const myColor& c);
+
 	//Convert myColor to SFML's sf::Color linear.
 	sf::Color toSFLinear(double min, double max);
 
-	//Print color values.
-	void print();
 };
 

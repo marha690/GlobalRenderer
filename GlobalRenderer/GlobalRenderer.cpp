@@ -1,5 +1,6 @@
 // Course: TNCG15, Advanced global illumination and rendering
-// Date: 2019-09-26 - 2019-10-03
+// Date: 2019-09-26
+// Author: Martin Hag
 
 #include "pch.h"
 #include <iostream>
@@ -78,10 +79,11 @@ int main()
 	for (int y = 0; y < CONSTANTS::screenSize_Y; y++) { //Vertical
 		for (int x = 0; x < CONSTANTS::screenSize_X; x++) { //Horizontal
 			
-			Pixel *activePixel = &camera.pixels[x + CONSTANTS::screenSize_Y* y];
-
 			//Create ray to the pixel.
 			camera.createPixelRays(x, y);
+
+			//Get pointer to the pixel
+			Pixel *activePixel = &camera.pixels[x + CONSTANTS::screenSize_Y* y];
 
 			//Give the ray of the pixel the color of what it hits.
 			scene.intersection(activePixel->ray);
@@ -98,7 +100,7 @@ int main()
 		renderCounter++;
 		if (renderCounter == 10)
 		{
-			//Draw a row of pixels.
+			//Draw all pixels.
 			updateWindow(window, sprite, texture, image);
 			renderCounter = 0;
 		}
