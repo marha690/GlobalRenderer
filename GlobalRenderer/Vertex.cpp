@@ -87,6 +87,6 @@ double Vertex::magnitude() const
 
 Vertex Vertex::normalize()
 {
-	float length = std::sqrt(x*x + y*y + z*z);
+	double length = std::sqrt(x*x + y*y + z*z);
 	return Vertex(x/length, y/length, z/length);
 }

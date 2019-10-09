@@ -18,11 +18,29 @@ Camera::Camera(int pxX, int pxY, Eye eye = Eye::EYE_ONE)
 }
 
 Camera::~Camera() {
-	delete pixels;
+}
+
+void Camera::render(Scene *s)
+{
+	int progress = 0;
+
+	for (int y = 0; y < pixelsVericaly; y++) {
+		for (int x = 0; x < pixelsHorizontaly; x++) {
+			Ray *ray;
+			ray = createPixelRays(x, y); //Create rays for the pixel.
+			s->intersection(ray);
+		}
+
+		if ((y % (pixelsVericaly / 10)) == 0)
+		{
+			progress += 10; // 10% more of the scene is rendered
+			std::cout << "Progress: " << progress << "%.\n";
+		}
+	}
 }
 
 //Connects pixel with the rays which is projected inside it.
-void Camera::createPixelRays(int x, int y) 
+Ray* Camera::createPixelRays(int x, int y) 
 {
 	double pixelWidth = (double(viewWidth) / double(pixelsHorizontaly));
 	double pixelHeight = (double(viewHeight) / double(pixelsVericaly));
@@ -34,4 +52,33 @@ void Camera::createPixelRays(int x, int y)
 
 	//Connect the ray to that pixel.
 	pixels[x + pixelsVericaly * y].connectRay(myRay);
+	return myRay;
+}
+
+double Camera::maxColorValue()
+{
+	double max = 0;
+	for (int y = 0; y < pixelsVericaly; y++) {
+		for (int x = 0; x < pixelsHorizontaly; x++) {
+			myColor c = pixels[x + pixelsVericaly * y].ray->color;
+
+			if (c.r > max)
+				max = c.r;
+			if (c.g > max)
+				max = c.g;
+			if (c.b > max)
+				max = c.b;
+		}
+	}
+	return max;
+}
+
+//Set pixels color from the pixel-rays interpolated colors.
+void Camera::setInternalPixelColors()
+{
+	for (int y = 0; y < pixelsVericaly; y++) {
+		for (int x = 0; x < pixelsHorizontaly; x++) {
+			pixels[x + pixelsVericaly * y].color = pixels[x + pixelsVericaly * y].ray->color;
+		}
+	}
 }

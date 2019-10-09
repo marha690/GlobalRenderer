@@ -37,7 +37,13 @@ public:
 	//Functions
 	Camera(int _pxX, int pxY, Eye eye);
 
-	void createPixelRays(int x, int y);
+	void render(Scene *s);
+
+	Ray* createPixelRays(int x, int y);
+
+	double maxColorValue();
+
+	void setInternalPixelColors();
 
 	~Camera();
 };

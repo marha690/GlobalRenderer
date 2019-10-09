@@ -19,5 +19,7 @@ public:
 	//Convert myColor to SFML's sf::Color linear.
 	sf::Color toSFLinear(double min, double max);
 
+	myColor toLinear(double min, double max);
+
 };
 

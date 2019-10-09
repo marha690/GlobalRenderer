@@ -2,6 +2,7 @@
 
 #include "Ray.h"
 #include "myColor.h"
+#include "SFML/Graphics.hpp"
 
 class Ray;
 class Triangle;

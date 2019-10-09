@@ -17,16 +17,18 @@ public:
 	myColor color;
 	Vertex normal;
 
+private:
+	double EPSILON = 0.0000001;
+
+
+public:
 	//Constructor
 	Triangle();
 	Triangle(Vertex _v1, Vertex _v2, Vertex _v3, Vertex _normal, myColor _color = myColor(255, 0, 0));
-
 
 	//Distructor
 	~Triangle();
 
 	// rayIntersection. Computes the intersection between a Ray and the Triangle with Möller-Trumbore alghorithm.
-	bool rayIntersection(Ray &r, Vertex &hitTriangle);
-private:
-	double EPSILON = 0.0000001;
+	bool rayIntersection(Ray &r, Vertex &hitTriangle, double &tOut);
 };

@@ -20,7 +20,7 @@ Triangle::~Triangle()
 
 
 // rayIntersection. Computes the intersection between a Ray and the Triangle with Möller-Trumbore alghorithm.
-bool Triangle::rayIntersection(Ray &r, Vertex &intersectionPoint)
+bool Triangle::rayIntersection(Ray &r, Vertex &intersectionPoint, double &tOut)
 {
 	Vertex rayDirection = (r.end - r.start).normalize();
 
@@ -49,6 +49,8 @@ bool Triangle::rayIntersection(Ray &r, Vertex &intersectionPoint)
 	u = (T*P) * f;
 	v = (Q*rayDirection) * f;
 
+	tOut = t;
+
 	if (u < 0.0 || u > 1.0) {
 		return false;
 	}
@@ -57,7 +59,7 @@ bool Triangle::rayIntersection(Ray &r, Vertex &intersectionPoint)
 		return false;
 	}
 
-
+	
 	if (t > EPSILON || t < 1/EPSILON) { //Ray intersection!
 		Vertex out = r.start + rayDirection * t;
 

@@ -2,6 +2,7 @@
 
 #include "Triangle.h"
 #include "Ray.h"
+#include "Tetrahedron.h"
 
 //Forward declaration
 class Trinagle;
@@ -12,6 +13,7 @@ public:
 
 	//Variables
 	Triangle room[24];
+	Tetrahedron tetrahedron;
 
 	//Constructor
 	Scene();
@@ -21,4 +23,6 @@ public:
 
 	//Intersection
 	void intersection(Ray *ray);
+
+	void intersections();
 };

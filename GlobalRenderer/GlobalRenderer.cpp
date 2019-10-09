@@ -49,6 +49,16 @@ void updateWindow(sf::RenderWindow &_window, sf::Sprite &_sprite, sf::Texture &_
 	_window.display();
 }
 
+
+void setImagePixels(sf::Image &_image, Camera &camera, double min, double max)
+{
+	for (int y = 0; y < CONSTANTS::screenSize_Y; y++) {
+		for (int x = 0; x < CONSTANTS::screenSize_X; x++) {
+			sf::Color color = camera.pixels[x + CONSTANTS::screenSize_Y* y].color.toSFLinear(0, max);
+			_image.setPixel(x, y, color);
+		}
+	}
+}
 /************************
 *			Main		*
 *************************/
@@ -67,48 +77,23 @@ int main()
 	sprite.setTexture(texture);         // put that texture in our sprite
 	sprite.setTextureRect(sf::IntRect(0, 0, CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y));    // the rectangle of the texture to use for this sprite
 	image.create(CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y, sf::Color::Cyan);
-
 	//Create scene with objects.
 	Scene scene = Scene();
-
 	//Create camera in scene.
 	Camera camera = Camera(CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y, Camera::Eye::EYE_TWO);
 
-	int renderCounter = 0;
+
+	//Render.
 	std::cout << "Starting rendering process\n";
-	for (int y = 0; y < CONSTANTS::screenSize_Y; y++) { //Vertical
-		for (int x = 0; x < CONSTANTS::screenSize_X; x++) { //Horizontal
-			
-			//Create ray to the pixel.
-			camera.createPixelRays(x, y);
 
-			//Get pointer to the pixel
-			Pixel *activePixel = &camera.pixels[x + CONSTANTS::screenSize_Y* y];
+	camera.render(&scene);
 
-			//Give the ray of the pixel the color of what it hits.
-			scene.intersection(activePixel->ray);
+	camera.setInternalPixelColors();
 
-			//Give the pixel color from its ray.
-			activePixel->color = activePixel->ray->color;
-
-			//Extract color from double to integer.
-			sf::Color color = activePixel->color.toSFLinear(0,255);
-
-			//set pixel in image.
-			image.setPixel(x, y, color);
-		}
-		renderCounter++;
-		if (renderCounter == 10)
-		{
-			//Draw all pixels.
-			updateWindow(window, sprite, texture, image);
-			renderCounter = 0;
-		}
-	}
+	setImagePixels(image, camera,0, camera.maxColorValue());
 
 	updateWindow(window, sprite, texture, image);
-	std::cout << "Render Complete!\n";
-	loopUpdate(window, sprite);
-	int a;
-	std::cin >> a;
+
+
+	loopUpdate(window, sprite); //Loop render window
 }

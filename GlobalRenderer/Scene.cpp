@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Scene.h"
 
-
-
 // Constructor
 Scene::Scene()
 {
@@ -61,6 +59,9 @@ Scene::Scene()
 		room[22] = Triangle(Vertex(13, 0, -5), Vertex(10, 6, 5), Vertex(10, 6, -5), Vertex(2, 1, 4), sponge);
 		room[23] = Triangle(Vertex(13, 0, -5), Vertex(13, 0, 5), Vertex(10, 6, 5), Vertex(2, 1, 4), sponge);
 	}
+
+	tetrahedron = Tetrahedron();
+	tetrahedron.transform(6, -1, -1);
 }
 
 // Destructor
@@ -70,11 +71,12 @@ Scene::~Scene()
 
 void Scene::intersection(Ray *ray)
 {
-
 	int counter= 0;
+
+	//Room
 	for (int i = 0; i < 24; i++) {
-		Vertex triangle;
-		bool isRayHitting = room[i].rayIntersection(*ray, triangle);
+		double lengthScalar = 0; Vertex roomPosition;
+		bool isRayHitting = room[i].rayIntersection(*ray, roomPosition, lengthScalar);
 
 		if (isRayHitting) {
 			ray->color = room[i].color;
@@ -82,8 +84,17 @@ void Scene::intersection(Ray *ray)
 		}
 	}
 
+	//Objects
+	Vertex closestPoint; int index;
+	bool isObjectHit = tetrahedron.rayIntersection(*ray, closestPoint, index);
+	if (isObjectHit) {
+		ray->color = tetrahedron.triangles[index].color;
+		counter++;
+	}
+
+
 	if (counter == 0) {
-		std::cerr << "Error! Ray missed room triangles!\n";
+		std::cerr << "Error! Ray misses room triangles!\n";
 	}
 
 }
