@@ -1,26 +1,27 @@
 #include "pch.h"
 #include "Scene.h"
+#include "Sphere.h"
 
 // Constructor
 Scene::Scene()
 {
+	myColor white = myColor(255, 255, 255);
+	myColor black = myColor(2, 2, 2);
+
+	myColor green = myColor(0, 155, 0);
+	myColor lightGreen = myColor(0, 255, 0);
+	myColor blue = myColor(0, 0, 155);
+	myColor lightBlue = myColor(0, 0, 255);
+	myColor red = myColor(155, 0, 0);
+	myColor lightRed = myColor(255, 0, 0);
+
+	myColor pink = myColor(255, 192, 203);
+	myColor cyan = myColor(153, 230, 179);
+	myColor sponge = myColor(253, 254, 3);
+	myColor mossgreen = myColor(53, 94, 59);
+
 	//Initialize the triangles for the room.
 	{
-		myColor white = myColor(255, 255, 255);
-		myColor black= myColor(2, 2, 2);
-
-		myColor green = myColor(0, 155, 0);
-		myColor lightGreen = myColor(0, 255, 0);
-		myColor blue = myColor(0, 0, 155);
-		myColor lightBlue = myColor(0, 0, 255);
-		myColor red = myColor(155, 0, 0);
-		myColor lightRed = myColor(255, 0, 0);
-
-		myColor pink = myColor(255, 192, 203);
-		myColor cyan = myColor(153, 230, 179);
-		myColor sponge = myColor(253, 254, 3);
-		myColor mossgreen = myColor(53, 94, 59);
-
 
 		//						v1					v2					v3			normal			color
 		// room[i] = Triangle(Vertex(0, 6, 5), Vertex(-3, 0, 5), Vertex(8, 0, 5), Vertex(0, 0, -1), white);
@@ -60,8 +61,8 @@ Scene::Scene()
 		room[23] = Triangle(Vertex(13, 0, -5), Vertex(13, 0, 5), Vertex(10, 6, 5), Vertex(2, 1, 4), sponge);
 	}
 
-	tetrahedron = Tetrahedron();
-	tetrahedron.transform(6, -1, -1);
+	tetrahedron = Tetrahedron(Vertex(6, -1, -1), lightRed);
+	sphere = Sphere(Vertex(5, 1, 0), lightBlue);
 }
 
 // Destructor
@@ -84,17 +85,22 @@ void Scene::intersection(Ray *ray)
 		}
 	}
 
-	//Objects
-	Vertex closestPoint; int index;
-	bool isObjectHit = tetrahedron.rayIntersection(*ray, closestPoint, index);
-	if (isObjectHit) {
+	//Tetrahedron
+	Vertex closestPoint; int index; double t_scalarLength = 9999999;
+	bool isTetrahedronHit = tetrahedron.rayIntersection(*ray, closestPoint, index, t_scalarLength);
+	if (isTetrahedronHit) {
 		ray->color = tetrahedron.triangles[index].color;
 		counter++;
 	}
 
+	//Sphere
+	double s_scalarLength = 99999999;
+	bool isSphereHit = sphere.rayIntersection(*ray, closestPoint, s_scalarLength);
+	if (isSphereHit && s_scalarLength < t_scalarLength) {
+		ray->color = sphere.color;
+	}
 
 	if (counter == 0) {
 		std::cerr << "Error! Ray misses room triangles!\n";
 	}
-
 }
