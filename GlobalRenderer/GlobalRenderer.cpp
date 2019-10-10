@@ -64,7 +64,6 @@ void setImagePixels(sf::Image &_image, Camera &camera, double min, double max)
 *************************/
 int main()
 {
-	std::cout << "Setup window...\n";
 	// Create our window
 	sf::RenderWindow window(
 		sf::VideoMode(CONSTANTS::screenSize_X, CONSTANTS::screenSize_Y),       // size of the client area we want
@@ -84,7 +83,8 @@ int main()
 
 
 	//Render.
-	std::cout << "Starting rendering process\n";
+	std::cout << "Starting rendering process. Size[" << CONSTANTS::screenSize_X 
+		<< "x" << CONSTANTS::screenSize_Y << "].\n";
 
 	camera.render(&scene);
 
@@ -94,6 +94,6 @@ int main()
 
 	updateWindow(window, sprite, texture, image);
 
-
+	std::cout << "Image finished.\n";
 	loopUpdate(window, sprite); //Loop render window
 }

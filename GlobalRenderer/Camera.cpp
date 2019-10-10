@@ -22,21 +22,15 @@ Camera::~Camera() {
 
 void Camera::render(Scene *s)
 {
-	int progress = 0;
-
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
 			Ray *ray;
 			ray = createPixelRays(x, y); //Create rays for the pixel.
-			s->intersection(ray);
+			s->intersection(ray); //Checks if it intersects
 		}
-
-		if ((y % (pixelsVericaly / 10)) == 0)
-		{
-			progress += 10; // 10% more of the scene is rendered
-			std::cout << "Progress: " << progress << "%.\n";
-		}
+		std::cout << "\rProgress: " << (y / (pixelsVericaly / 100)) << "%";
 	}
+		std::cout << "\rProgress: 100%\n";
 }
 
 //Connects pixel with the rays which is projected inside it.
@@ -49,6 +43,7 @@ Ray* Camera::createPixelRays(int x, int y)
 
 	//Create ray for the pixel
 	Ray *myRay = new Ray(startPosition, pixelPosition);
+	myRay->setEnd( myRay->getDirection().normalize() * 100, nullptr );
 
 	//Connect the ray to that pixel.
 	pixels[x + pixelsVericaly * y].connectRay(myRay);
@@ -60,7 +55,7 @@ double Camera::maxColorValue()
 	double max = 0;
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
-			myColor c = pixels[x + pixelsVericaly * y].ray->color;
+			MyColor c = pixels[x + pixelsVericaly * y].ray->getColor();
 
 			if (c.r > max)
 				max = c.r;
@@ -78,7 +73,7 @@ void Camera::setInternalPixelColors()
 {
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
-			pixels[x + pixelsVericaly * y].color = pixels[x + pixelsVericaly * y].ray->color;
+			pixels[x + pixelsVericaly * y].color = pixels[x + pixelsVericaly * y].ray->getColor();
 		}
 	}
 }

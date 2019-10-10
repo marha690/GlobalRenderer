@@ -4,10 +4,10 @@
 
 Pixel::Pixel()
 {
-	color = myColor(250, 0, 250);
+	color = MyColor(250, 0, 250);
 }
 
-void Pixel::setColor(myColor _color)
+void Pixel::setColor(MyColor _color)
 {
 	color = _color;
 }

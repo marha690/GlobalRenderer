@@ -5,12 +5,17 @@
 
 class Tetrahedron
 {
+public:
+	//Constructors & destructors
+	Tetrahedron();
+	Tetrahedron(Vertex pos, MyColor _color);
+	~Tetrahedron();
+
 	//Variables
 public:
-
 	Triangle triangles[4];
 private:
-	myColor color;
+	MyColor color;
 	Vertex v0 = Vertex(0, 0, 0);
 	Vertex v1 = Vertex(0, 0, 2);
 	Vertex v2 = Vertex(0, std::sqrt(3), 1);
@@ -18,13 +23,8 @@ private:
 
 	//Functions
 public:
-	Tetrahedron();
-	Tetrahedron(Vertex pos, myColor _color);
-	~Tetrahedron();
-
-	bool rayIntersection(Ray & r, Vertex & intersectionPoint, int &triangleIndex, double &_scalar);
-
-	void transform(Vertex ppos);
+	bool rayIntersection(Ray & r);
+	void transform(Vertex pos);
 	void transform(double x, double y, double z);
 };
 

@@ -2,24 +2,24 @@
 
 #include "SFML/Graphics.hpp"
 
-class myColor
+class MyColor
 {
 public:
 	//Variables
 	double r, g, b;
 	//Constructor
-	myColor();
-	myColor(double _r, double _g, double _b);
+	MyColor();
+	MyColor(double _r, double _g, double _b);
 
 	//Destructor
-	~myColor();
+	~MyColor();
 
-	friend std::ostream& operator<<(std::ostream& os, const myColor& c);
+	friend std::ostream& operator<<(std::ostream& os, const MyColor& c);
 
 	//Convert myColor to SFML's sf::Color linear.
 	sf::Color toSFLinear(double min, double max);
 
-	myColor toLinear(double min, double max);
+	MyColor toLinear(double min, double max);
 
 };
 

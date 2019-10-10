@@ -7,11 +7,12 @@
 Sphere::Sphere()
 {
 	center = Vertex(0,0,0);
-	color = myColor(251,251,251);
+	color = MyColor(251,251,251);
 }
 
-Sphere::Sphere(Vertex _center, myColor _c)
+Sphere::Sphere(Vertex _center, double _radius, MyColor _c)
 {
+	radius = _radius;
 	center = _center;
 	color = _c;
 }
@@ -31,9 +32,9 @@ void Sphere::transform(double x, double y, double z)
 	transform(Vertex(x, y, x));
 }
 
-bool Sphere::rayIntersection(Ray &r, Vertex &intersectionPoint, double &scalar) 
+bool Sphere::rayIntersection(Ray &r) 
 {
-	Vertex start = r.start;
+	Vertex start = r.getStart();
 	Vertex direction = r.getDirection().normalize();
 
 	double a = direction * direction;
@@ -46,12 +47,13 @@ bool Sphere::rayIntersection(Ray &r, Vertex &intersectionPoint, double &scalar)
 	double scalarPositive = firstTerm + sqrtTerm;
 	double scalarNegative = firstTerm - sqrtTerm;
 
-	Vertex x = start +  direction * scalarPositive; //potental intersection with the sphere.
-	Vertex xx = start + direction * scalarNegative; //potential intersection with the sphere.
+	Vertex sphereHit1 = start +  direction * scalarPositive; //potental intersection with the sphere.
+	Vertex sphereHit2 = start + direction * scalarNegative; //potential intersection with the sphere.
 
 	double myEPSILON = 0.000001;
-	if ((x - center)*(x - center) - (radius*radius) < myEPSILON) {
-		scalar = scalarPositive;
+	if ((sphereHit1 - center)*(sphereHit1 - center) - (radius*radius) < myEPSILON) {
+		r.setEnd(sphereHit1, nullptr);
+		r.setColor(this->color);
 		return true;
 	}
 

@@ -2,24 +2,32 @@
 
 #include "Ray.h"
 #include "Vertex.h"
-#include "myColor.h"
+#include "MyColor.h"
 
-class myColor;
+class MyColor;
 
 class Sphere
 {
-public: //Variables
-	double radius = 0.5;
-	Vertex center;
-	myColor color;
-
-public: //Functions
+public:
+	//Constructors & destructors
 	Sphere();
-	Sphere(Vertex _center, myColor _c);
+	Sphere(Vertex _center, double _radius, MyColor _c);
 	~Sphere();
+
+	//Variables
+private:
+	Vertex center;
+	double radius = 0.5;
+	MyColor color;
+	
+	//Getters
+public:
+	MyColor getColor() { return color; }
+
+	//Functions
+public: 
+	bool rayIntersection(Ray & r);
 	void transform(Vertex tr);
 	void transform(double x, double y, double z);
-
-	bool rayIntersection(Ray & r, Vertex & intersectionPoint, double &scalar);
 };
 

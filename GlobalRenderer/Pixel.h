@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Ray.h"
-#include "myColor.h"
+#include "MyColor.h"
 #include "SFML/Graphics.hpp"
 
 class Ray;
@@ -13,12 +13,12 @@ public:
 
 	//Variables
 	Ray *ray;
-	myColor color;
+	MyColor color;
 
-	void setColor(myColor _color);
+	void setColor(MyColor _color);
 	void connectRay(Ray *_ray);
 
-	myColor getColor() { return color; }
+	MyColor getColor() { return color; }
 
 	Pixel();
 

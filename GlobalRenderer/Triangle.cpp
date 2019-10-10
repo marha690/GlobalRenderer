@@ -1,76 +1,92 @@
 #include "pch.h"
 #include "Triangle.h"
 
-// Constructor
-Triangle::Triangle()
-{}
+// Constructors & destructors
+Triangle::Triangle() {
+}
 
-// Constructor
-Triangle::Triangle(Vertex _v1, Vertex _v2, Vertex _v3, Vertex _normal, myColor _color)
-	: v1(_v1), v2(_v2), v3(_v3), normal(_normal)
+Triangle::Triangle(Vertex _v0, Vertex _v1, Vertex _v2, MyColor _color)
+	: v0(_v0), v1(_v1), v2(_v2), color(_color)
 {
-	color = _color;
+	setNormal(v0, v1, v2);
 }
 
 
-//Destructor
+
 Triangle::~Triangle()
 {
 }
 
 
-// rayIntersection. Computes the intersection between a Ray and the Triangle with Möller-Trumbore alghorithm.
-bool Triangle::rayIntersection(Ray &r, Vertex &intersectionPoint, double &tOut)
-{
-	Vertex rayDirection = (r.end - r.start).normalize();
 
-	Vertex edge1 = v2 - v1;
-	Vertex edge2 = v3 - v1;
+//Setters
+void Triangle::setNormal(Vertex v0, Vertex v1, Vertex v2)
+{
+	Vertex line1 = v1 - v0;
+	Vertex line2 = v2 - v0;
+
+	Vertex normalDir = line1 ^ line2;
+
+	normal = normalDir.normalize();
+}
+
+
+
+//Other Functions
+
+//Computes the intersection between a Ray and the Triangle with Möller-Trumbore alghorithm.
+bool Triangle::rayIntersection(Ray &r)
+{
+	Vertex rayEnd = r.getEnd();
+	Vertex rayStart = r.getStart();
+	Vertex rayDirection = (rayEnd - rayStart).normalize();
+
+	Vertex edge1 = v1 - v0;
+	Vertex edge2 = v2 - v0;
 
 	Vertex T, Q, P;
-	T = r.start - v1;
+	T = rayStart - v0;
 
 	// Cross products.
 	P = rayDirection ^ edge2;
-	Q = T ^ edge1;
 
 	double a, f;
-	double t, u, v;
-
 	a = P * edge1;
 
 	if ( std::abs(a) < EPSILON) {
 		return false;
 	}
 
+	Q = T ^ edge1;
 	f = 1.0 / a;
 
+	double t, u, v;
 	t = (Q * edge2) * f;
 	u = (T*P) * f;
 	v = (Q*rayDirection) * f;
-
-	tOut = t;
 
 	if (u < 0.0 || u > 1.0) {
 		return false;
 	}
 
+	//Does it hit the triangle?
 	if (v < 0.0 || u + v > 1.0) {
 		return false;
 	}
 
-	
-	if (t > EPSILON || t < 1/EPSILON) { //Ray intersection!
-		Vertex out = r.start + rayDirection * t;
-
-		intersectionPoint = out;
-
-		if ( t < 0)
-			return false; //Triangle is located oposite of our rays direction.
-
-		return true;
-	}
-	else { //This means there are a line intersecting but not a ray intersection.
+	//Check if the hit is behind of rays startposition.
+	if (t <= 0)
 		return false;
-	}
+
+	Vertex newRayEnd = rayStart + rayDirection * t;
+
+	//Is the new hit futher away than the rays end?
+	if (newRayEnd.magnitude() > rayEnd.magnitude())
+		return false;
+
+	r.setEnd(newRayEnd, this); // sets new end position and this triangle as hitted surface.
+	r.setColor(this->color);
+
+	return true;
 }
+

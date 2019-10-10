@@ -1,20 +1,20 @@
 #include "pch.h"
-#include "myColor.h"
+#include "MyColor.h"
 
 #include <iostream>
 
 //Constructor
-myColor::myColor()
+MyColor::MyColor()
 	:r(101), b(101), g(101) {}
-myColor::myColor(double _r = 255, double _g = 255, double _b = 255)
+MyColor::MyColor(double _r = 255, double _g = 255, double _b = 255)
 	: r(_r), b(_b), g(_g) {}
 
 //Destructor
-myColor::~myColor()
+MyColor::~MyColor()
 {
 }
 
-sf::Color myColor::toSFLinear(double min, double max)
+sf::Color MyColor::toSFLinear(double min, double max)
 {
 	//Normalize colors
 	double red = (r-min) / (max); //Norm between 0 and 1.
@@ -29,7 +29,7 @@ sf::Color myColor::toSFLinear(double min, double max)
 	return sf::Color((int)red, (int)green, (int)blue);
 }
 
-myColor myColor::toLinear(double min, double max)
+MyColor MyColor::toLinear(double min, double max)
 {
 	//Normalize colors
 	double red = (r - min) / (max); //Norm between 0 and 1.
@@ -41,10 +41,10 @@ myColor myColor::toLinear(double min, double max)
 	green *= 255;
 	blue *= 255;
 
-	return myColor((int)red, (int)green, (int)blue);
+	return MyColor((int)red, (int)green, (int)blue);
 }
 
-std::ostream& operator<<(std::ostream& os, const myColor& c)
+std::ostream& operator<<(std::ostream& os, const MyColor& c)
 {
 	os << "Color:[" << c.r << ", " << c.g << ", " << c.b << "]\n";
 	return os;
