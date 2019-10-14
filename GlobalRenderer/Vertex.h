@@ -30,6 +30,9 @@ public:
 
 	//multiplication of vextor and double.
 	friend Vertex operator*(const Vertex &v1, const double &i);
+	friend Vertex operator*(const double &i, const Vertex &v1);
+
+	friend Vertex operator/(const Vertex &v1, const double &d);
 
 	double magnitude() const;
 	Vertex normalize();

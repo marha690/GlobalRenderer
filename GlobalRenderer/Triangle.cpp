@@ -39,52 +39,42 @@ bool Triangle::rayIntersection(Ray &r)
 {
 	Vertex rayEnd = r.getEnd();
 	Vertex rayStart = r.getStart();
-	Vertex rayDirection = (rayEnd - rayStart).normalize();
 
 	Vertex edge1 = v1 - v0;
 	Vertex edge2 = v2 - v0;
-
-	Vertex T, Q, P;
-	T = rayStart - v0;
+	Vertex T = rayStart - v0;
+	Vertex D = (rayEnd - rayStart);//.normalize(); //Direction
 
 	// Cross products.
-	P = rayDirection ^ edge2;
+	Vertex P = D ^ edge2;
+	Vertex Q = T ^ edge1;
 
-	double a, f;
-	a = P * edge1;
+	double a = P * edge1;
 
-	if ( std::abs(a) < EPSILON) {
+	if ( std::abs(a) < EPSILON)
 		return false;
-	}
+	
 
-	Q = T ^ edge1;
-	f = 1.0 / a;
+	double f = 1.0 / a;
+	double u = (T*P) * f;
+	double v = (Q*D) * f;
 
-	double t, u, v;
-	t = (Q * edge2) * f;
-	u = (T*P) * f;
-	v = (Q*rayDirection) * f;
 
-	if (u < 0.0 || u > 1.0) {
+	if (u < 0.0 || u > 1.0)
 		return false;
-	}
 
-	//Does it hit the triangle?
-	if (v < 0.0 || u + v > 1.0) {
+	if (v < 0.0 || u + v > 1.0)
 		return false;
-	}
+	
+	double t = (edge2 * Q) * f;
 
 	//Check if the hit is behind of rays startposition.
-	if (t <= 0)
+	if (t <= EPSILON || t > 1 - EPSILON)
 		return false;
 
-	Vertex newRayEnd = rayStart + rayDirection * t;
 
-	//Is the new hit futher away than the rays end?
-	if (newRayEnd.magnitude() > rayEnd.magnitude())
-		return false;
-
-	r.setEnd(newRayEnd, this); // sets new end position and this triangle as hitted surface.
+	Vertex rayHitPosition = rayStart + D * t;
+	r.setEnd(rayHitPosition, this); // sets new end position and this triangle as hitted surface.
 	r.setColor(this->color);
 
 	return true;

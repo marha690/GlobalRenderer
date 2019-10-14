@@ -27,7 +27,6 @@ Vertex::~Vertex()
 {
 }
 
-
 std::ostream& operator<<(std::ostream& os, const Vertex& v)
 {
 	os << "( " << v.x << ", " << v.y << ", " << v.z << " )\n";
@@ -70,7 +69,6 @@ double operator*(const Vertex &v1, const Vertex &v2)
 }
 
 
-//Division of two vectors
 Vertex operator*(const Vertex &v1, const double &i)
 {
 	Vertex newV = v1;
@@ -78,6 +76,16 @@ Vertex operator*(const Vertex &v1, const double &i)
 	newV.y *= i;
 	newV.z *= i;
 	return newV;
+}
+
+Vertex operator*(const double &i, const Vertex &v1)
+{
+	return (v1 * i);
+}
+
+Vertex operator/(const Vertex &v1, const double &d)
+{
+	return Vertex(v1.x / d, v1.y / d, v1.z / d);
 }
 
 double Vertex::magnitude() const

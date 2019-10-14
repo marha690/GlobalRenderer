@@ -62,7 +62,10 @@ Scene::Scene()
 	}
 
 	tetrahedron = Tetrahedron(Vertex(6, -1, -1), lightRed);
+
 	sphere = Sphere(Vertex(5, 1, 0), 0.5, lightBlue);
+
+	lightsource = Lightsource(Vertex(5, 0, 5));
 }
 
 // Destructor
@@ -72,7 +75,6 @@ Scene::~Scene()
 
 void Scene::intersection(Ray *ray)
 {
-
 	//Room
 	for (int i = 0; i < 24; i++) {
 		room[i].rayIntersection(*ray);
@@ -82,4 +84,23 @@ void Scene::intersection(Ray *ray)
 
 	//Sphere
 	sphere.rayIntersection(*ray); //Returns null for hit triangle!
+}
+
+bool Scene::isIntersected(Ray *ray)
+{
+	//Room
+	for (int i = 0; i < 24; i++) {
+		if (room[i].rayIntersection(*ray))
+			return true;
+	}
+
+	//Tetrahedron
+	if (tetrahedron.rayIntersection(*ray))
+		return true;
+
+	//Sphere
+	if (sphere.rayIntersection(*ray)) //Returns null for hit triangle!
+		return true;
+
+	return false;
 }

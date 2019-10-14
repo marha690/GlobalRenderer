@@ -1,6 +1,13 @@
 #include "pch.h"
 #include "Camera.h"
 
+#include <cmath>
+
+#include <glm.hpp>
+#include <vec3.hpp>
+#include <vec4.hpp>
+#include <mat4x4.hpp>
+
 Camera::Camera(int pxX, int pxY, Eye eye = Eye::EYE_ONE)
 {
 	pixelsHorizontaly = pxX;
@@ -26,7 +33,59 @@ void Camera::render(Scene *s)
 		for (int x = 0; x < pixelsHorizontaly; x++) {
 			Ray *ray;
 			ray = createPixelRays(x, y); //Create rays for the pixel.
+
 			s->intersection(ray); //Checks if it intersects
+
+			//Calculations for light.
+
+			// from traingle to lightsource.
+			Ray *shadowRay = new Ray(ray->getEnd(), s->lightsource.position);
+
+
+			// Give ray no color if the target is in shadows!
+			if(s->isIntersected(shadowRay))
+				ray->setColor(MyColor(0,0,0));
+
+
+			//localLightContribution:
+			Triangle *triangle = ray->getTriangle();
+
+			if (!triangle) {
+				continue;
+				//std::cout << "ray does not hit a triangle.\n";
+			}
+
+
+			Vertex Z = triangle->getNormal().normalize();
+			Vertex IT = ray->getDirection().normalize() - (ray->getDirection().normalize() * Z) * Z;
+			Vertex X = IT / IT.magnitude();
+			Vertex Y = (-1 * X)^ Z;
+
+			glm::mat4x4 local{ X.x, X.y, X.z, 0, Y.x, Y.y, Y.z, 0, Z.x, Z.y, Z.z, 0, 0, 0, 0, 1};
+			glm::mat4x4 translation{0, 0, 0, -(ray->getEnd().x),
+								    0, 1, 0, -(ray->getEnd().y),
+								    0 ,0 , 1, -(ray->getEnd().z),
+								    0, 0 ,0 ,1};
+
+			glm::mat4x4 M = local * translation;
+
+
+			//Vertex u = Z.normalize();
+			//Vertex v = shadowRay->getDirection().normalize();
+			////std::cout << "shadowray: " << v << ".\n";
+			////std::cout << "Triangle normal: " << u << ".\n";
+
+			//double angle = std::acos((u * v) / (u.magnitude() * v.magnitude()));
+			////std::cout << "acos: " << angle << ".\n";
+
+			//double kd = 2;
+
+			//if (angle > 3.14 / 2) {
+			//	ray->setColor(ray->getColor() * kd * angle);
+			//}
+
+
+
 		}
 		std::cout << "\rProgress: " << (y / (pixelsVericaly / 100)) << "%";
 	}
@@ -43,7 +102,7 @@ Ray* Camera::createPixelRays(int x, int y)
 
 	//Create ray for the pixel
 	Ray *myRay = new Ray(startPosition, pixelPosition);
-	myRay->setEnd( myRay->getDirection().normalize() * 100, nullptr );
+	myRay->setEnd( myRay->getDirection().normalize() * 1000, nullptr );
 
 	//Connect the ray to that pixel.
 	pixels[x + pixelsVericaly * y].connectRay(myRay);

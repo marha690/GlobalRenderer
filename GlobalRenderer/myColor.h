@@ -16,6 +16,8 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& os, const MyColor& c);
 
+	friend MyColor operator*(const MyColor &c, const double &d);
+
 	//Convert myColor to SFML's sf::Color linear.
 	sf::Color toSFLinear(double min, double max);
 

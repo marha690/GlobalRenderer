@@ -49,3 +49,7 @@ std::ostream& operator<<(std::ostream& os, const MyColor& c)
 	os << "Color:[" << c.r << ", " << c.g << ", " << c.b << "]\n";
 	return os;
 }
+
+MyColor operator*(const MyColor &c, const double &d) {
+	return MyColor(c.r * d, c.g * d, c.b * d);
+}

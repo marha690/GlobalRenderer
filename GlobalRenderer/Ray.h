@@ -19,7 +19,7 @@ private:
 	Vertex start;
 	Vertex end;
 	MyColor color;
-	Triangle *hitTriangle;
+	Triangle *hitTriangle = nullptr;
 
 	//Setters
 public:
@@ -34,6 +34,7 @@ public:
 	Vertex getStart() { return start; }
 	Vertex getDirection() { return (end - start); }
 	MyColor getColor() { return color; }
+	Triangle* getTriangle() { return hitTriangle; }
 
 	//Other Functions
 public:

@@ -8,16 +8,20 @@ class Lightsource
 {
 	//Constructor & destructor
 public:
-	Lightsource(Vertex p0, Vertex p1, Vertex p2, Vertex p3);
+	Lightsource() = default;
+	Lightsource(Vertex pos);
 	~Lightsource();
 
 	//Variables
 public:
-	MyColor lightColor;
+	MyColor color;
+	Vertex position;
 private:
 	Vertex v0, v1, v2, v3;
 	Triangle triangles[2];
-	MyColor whiteLight = MyColor(255, 255, 255);
+
+	double L0 = 500;
+	MyColor whiteLight = MyColor(L0, L0, L0);
 	
 	//Functions
 public:

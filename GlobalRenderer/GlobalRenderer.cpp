@@ -10,11 +10,8 @@
 #include "Scene.h"
 #include "Camera.h"
 
-namespace CONSTANTS
-{
-	const int   screenSize_X = 800;
-	const int   screenSize_Y = 800;
-}
+#include "Definitions.h"
+
 
 // Loop if i want to use it in main later. Code has to be in while loop to update.
 void loopUpdate(sf::RenderWindow &_window, sf::Sprite &_sprite)

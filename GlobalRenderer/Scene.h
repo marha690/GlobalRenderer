@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include "Tetrahedron.h"
 #include "Sphere.h"
+#include "LightSource.h"
 
 //Forward declaration
 class Trinagle;
@@ -16,6 +17,7 @@ public:
 	Triangle room[24];
 	Tetrahedron tetrahedron;
 	Sphere sphere;
+	Lightsource lightsource;
 
 	//Constructor
 	Scene();
@@ -26,5 +28,5 @@ public:
 	//Intersection
 	void intersection(Ray *ray);
 
-	void intersection();
+	bool isIntersected(Ray *ray);
 };
