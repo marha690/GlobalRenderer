@@ -26,46 +26,46 @@ Scene::Scene()
 		//						v1					v2					v3			normal			color
 		// room[i] = Triangle(Vertex(0, 6, 5), Vertex(-3, 0, 5), Vertex(8, 0, 5), Vertex(0, 0, -1), white);
 		//Roof
-		room[0] = Triangle(Vertex(0, 6, 5), Vertex(-3, 0, 5), Vertex(8, 0, 5), white);
-		room[1] = Triangle(Vertex(10, 6, 5), Vertex(0, 6, 5), Vertex(8, 0, 5), white);
-		room[2] = Triangle(Vertex(13, 0, 5), Vertex(10, 6, 5), Vertex(8, 0, 5), white);
-		room[3] = Triangle(Vertex(10, -6, 5), Vertex(13, 0, 5), Vertex(8, 0, 5), white);
-		room[4] = Triangle(Vertex(0, -6, 5), Vertex(10, -6, 5), Vertex(8, 0, 5), white);
-		room[5] = Triangle(Vertex(-3, 0, 5), Vertex(0, -6, 5), Vertex(8, 0, 5), white);
+		room[0] = Triangle(Vertex(0, 6, 5, 1), Vertex(-3, 0, 5, 1), Vertex(8, 0, 5, 1), white);
+		room[1] = Triangle(Vertex(10, 6, 5, 1), Vertex(0, 6, 5, 1), Vertex(8, 0, 5, 1), white);
+		room[2] = Triangle(Vertex(13, 0, 5, 1), Vertex(10, 6, 5, 1), Vertex(8, 0, 5, 1), white);
+		room[3] = Triangle(Vertex(10, -6, 5, 1), Vertex(13, 0, 5, 1), Vertex(8, 0, 5, 1), white);
+		room[4] = Triangle(Vertex(0, -6, 5, 1), Vertex(10, -6, 5, 1), Vertex(8, 0, 5, 1), white);
+		room[5] = Triangle(Vertex(-3, 0, 5, 1), Vertex(0, -6, 5, 1), Vertex(8, 0, 5, 1), white);
 
 		//Floor
-		room[6] = Triangle(Vertex(0, 6, -5), Vertex(-3, 0, -5), Vertex(8, 0, -5), white);
-		room[7] = Triangle(Vertex(10, 6, -5), Vertex(0, 6, -5), Vertex(8, 0, -5), white);
-		room[8] = Triangle(Vertex(13, 0, -5), Vertex(10, 6, -5), Vertex(8, 0, -5), white);
-		room[9] = Triangle(Vertex(10, -6, -5), Vertex(13, 0, -5), Vertex(8, 0, -5), white);
-		room[10] = Triangle(Vertex(0, -6, -5), Vertex(10, -6, -5), Vertex(8, 0, -5), white);
-		room[11] = Triangle(Vertex(-3, 0, -5), Vertex(0, -6, -5), Vertex(8, 0, -5), white);
+		room[6] = Triangle(Vertex(0, 6, -5, 1), Vertex(-3, 0, -5, 1), Vertex(8, 0, -5, 1), white);
+		room[7] = Triangle(Vertex(10, 6, -5, 1), Vertex(0, 6, -5, 1), Vertex(8, 0, -5, 1), white);
+		room[8] = Triangle(Vertex(13, 0, -5, 1), Vertex(10, 6, -5, 1), Vertex(8, 0, -5, 1), white);
+		room[9] = Triangle(Vertex(10, -6, -5, 1), Vertex(13, 0, -5, 1), Vertex(8, 0, -5, 1), white);
+		room[10] = Triangle(Vertex(0, -6, -5, 1), Vertex(10, -6, -5, 1), Vertex(8, 0, -5, 1), white);
+		room[11] = Triangle(Vertex(-3, 0, -5, 1), Vertex(0, -6, -5, 1), Vertex(8, 0, -5, 1), white);
 
 		//Walls
-		room[12] = Triangle(Vertex(0, -6, -5), Vertex(-3, 0, 5), Vertex(-3, 0, -5), red);
-		room[13] = Triangle(Vertex(0, -6, -5), Vertex(0, -6, 5), Vertex(-3, 0, 5), red);
+		room[12] = Triangle(Vertex(0, -6, -5, 1), Vertex(-3, 0, 5, 1), Vertex(-3, 0, -5, 1), red);
+		room[13] = Triangle(Vertex(0, -6, -5, 1), Vertex(0, -6, 5, 1), Vertex(-3, 0, 5, 1), red);
 
-		room[14] = Triangle(Vertex(0, 6, -5), Vertex(-3, 0, 5), Vertex(-3, 0, -5), lightRed);
-		room[15] = Triangle(Vertex(0, 6, -5), Vertex(0, 6, 5), Vertex(-3, 0, 5), lightRed);
+		room[14] = Triangle(Vertex(0, 6, -5, 1), Vertex(-3, 0, 5, 1), Vertex(-3, 0, -5, 1), lightRed);
+		room[15] = Triangle(Vertex(0, 6, -5, 1), Vertex(0, 6, 5, 1), Vertex(-3, 0, 5, 1), lightRed);
 
-		room[16] = Triangle(Vertex(10, -6, -5), Vertex(0, -6, 5), Vertex(0, -6, -5), pink);
-		room[17] = Triangle(Vertex(10, -6, -5), Vertex(10, -6, 5), Vertex(0, -6, 5), pink);
+		room[16] = Triangle(Vertex(10, -6, -5, 1), Vertex(0, -6, 5, 1), Vertex(0, -6, -5, 1), pink);
+		room[17] = Triangle(Vertex(10, -6, -5, 1), Vertex(10, -6, 5, 1), Vertex(0, -6, 5, 1), pink);
 
-		room[18] = Triangle(Vertex(10, 6, -5), Vertex(0, 6, 5), Vertex(0, 6, -5), mossgreen);
-		room[19] = Triangle(Vertex(10, 6, -5), Vertex(10, 6, 5), Vertex(0, 6, 5), mossgreen);
+		room[18] = Triangle(Vertex(10, 6, -5, 1), Vertex(0, 6, 5, 1), Vertex(0, 6, -5, 1), mossgreen);
+		room[19] = Triangle(Vertex(10, 6, -5, 1), Vertex(10, 6, 5, 1), Vertex(0, 6, 5, 1), mossgreen);
 
-		room[20] = Triangle(Vertex(13, 0, -5), Vertex(10, -6, 5), Vertex(10, -6, -5), cyan);
-		room[21] = Triangle(Vertex(13, 0, -5), Vertex(13, 0, 5), Vertex(10, -6, 5), cyan);
+		room[20] = Triangle(Vertex(13, 0, -5, 1), Vertex(10, -6, 5, 1), Vertex(10, -6, -5, 1), cyan);
+		room[21] = Triangle(Vertex(13, 0, -5, 1), Vertex(13, 0, 5, 1), Vertex(10, -6, 5, 1), cyan);
 
-		room[22] = Triangle(Vertex(13, 0, -5), Vertex(10, 6, 5), Vertex(10, 6, -5), sponge);
-		room[23] = Triangle(Vertex(13, 0, -5), Vertex(13, 0, 5), Vertex(10, 6, 5), sponge);
+		room[22] = Triangle(Vertex(13, 0, -5, 1), Vertex(10, 6, 5, 1), Vertex(10, 6, -5, 1), sponge);
+		room[23] = Triangle(Vertex(13, 0, -5, 1), Vertex(13, 0, 5, 1), Vertex(10, 6, 5, 1), sponge);
 	}
 
-	tetrahedron = Tetrahedron(Vertex(6, -1, -1), lightRed);
+	tetrahedron = Tetrahedron(Vertex(6, -1, -1, 1), lightRed);
 
-	sphere = Sphere(Vertex(5, 1, 0), 0.5, lightBlue);
+	sphere = Sphere(Vertex(5, 1, 0, 1), 0.5, lightBlue);
 
-	lightsource = Lightsource(Vertex(5, 0, 5));
+	lightsource = Lightsource(Vertex(5, 0, 5, 1));
 }
 
 // Destructor

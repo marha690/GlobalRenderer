@@ -8,6 +8,7 @@
 #include <glm.hpp>
 #include <vec3.hpp>
 #include <vec4.hpp>
+#include <dvec.h>
 #include <mat4x4.hpp>
 
 namespace CONSTANTS {
@@ -24,10 +25,10 @@ enum Surface {
 
 
 using Color = glm::dvec3;
+using Vertex = glm::dvec4;
+using Direction = glm::dvec3;
 /*
 Use this if i want to remove my own vertex class.
-using Vertex = glm::vec4;
-using Direction = glm::vec3;
 */
 
 #endif // DEFINITIONS

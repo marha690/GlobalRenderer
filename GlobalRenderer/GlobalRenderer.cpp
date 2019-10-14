@@ -6,7 +6,6 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
 
-#include "myColor.h"
 #include "Scene.h"
 #include "Camera.h"
 

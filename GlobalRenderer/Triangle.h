@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iostream> //for debugging messages
-#include "Vertex.h"
 #include "Ray.h"
 #include "Definitions.h"
 
@@ -21,7 +20,7 @@ public:
 private:
 	Vertex v0, v1, v2; // corners of the triangle
 	Color color;
-	Vertex normal;
+	Direction normal;
 
 	double EPSILON = 0.0000001;
 	//Setters
@@ -31,7 +30,7 @@ public:
 	void setNormal(Vertex v0,Vertex v1,Vertex v2);
 	//Getters
 public:
-	Vertex getNormal() { return normal; }
+	Direction getNormal() { return normal; }
 	Color getColor() { return color; }
 
 	//Other Functions

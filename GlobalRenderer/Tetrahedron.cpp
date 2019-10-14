@@ -45,10 +45,10 @@ void Tetrahedron::transform(Vertex pos)
 void Tetrahedron::transform(double x, double y, double z) 
 {
 
-	v0 = v0 + Vertex(x, y, z);
-	v1 = v1 + Vertex(x, y, z);
-	v2 = v2 + Vertex(x, y, z);
-	v3 = v3 + Vertex(x, y, z);
+	v0 = v0 + Vertex(x, y, z, 1);
+	v1 = v1 + Vertex(x, y, z, 1);
+	v2 = v2 + Vertex(x, y, z, 1);
+	v3 = v3 + Vertex(x, y, z, 1);
 
 	triangles[0] = Triangle(v0, v1, v2, triangles[0].getColor());
 	triangles[1] = Triangle(v1, v2, v3, triangles[1].getColor());

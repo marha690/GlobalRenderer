@@ -22,12 +22,12 @@ Triangle::~Triangle()
 //Setters
 void Triangle::setNormal(Vertex v0, Vertex v1, Vertex v2)
 {
-	Vertex line1 = v1 - v0;
-	Vertex line2 = v2 - v0;
+	Direction line1 = v1 - v0;
+	Direction line2 = v2 - v0;
 
-	Vertex normalDir = line1 ^ line2;
+	Direction normalDir = glm::cross(line1, line2);
 
-	normal = normalDir.normalize();
+	normal = glm::normalize(normalDir);
 }
 
 
@@ -40,24 +40,24 @@ bool Triangle::rayIntersection(Ray &r)
 	Vertex rayEnd = r.getEnd();
 	Vertex rayStart = r.getStart();
 
-	Vertex edge1 = v1 - v0;
-	Vertex edge2 = v2 - v0;
-	Vertex T = rayStart - v0;
-	Vertex D = (rayEnd - rayStart);//.normalize(); //Direction
+	Direction edge1 = v1 - v0;
+	Direction edge2 = v2 - v0;
+	Direction T = rayStart - v0;
+	Direction D = (rayEnd - rayStart); //Direction
 
 	// Cross products.
-	Vertex P = D ^ edge2;
-	Vertex Q = T ^ edge1;
+	Direction P = glm::cross(D, edge2);
+	Direction Q = glm::cross(T, edge1);
 
-	double a = P * edge1;
+	double a = glm::dot(P,edge1);
 
 	if ( std::abs(a) < EPSILON)
 		return false;
 	
 
 	double f = 1.0 / a;
-	double u = (T*P) * f;
-	double v = (Q*D) * f;
+	double u = glm::dot(glm::dot(T, P), f);
+	double v = glm::dot(glm::dot(Q, D), f);
 
 
 	if (u < 0.0 || u > 1.0)
@@ -66,15 +66,15 @@ bool Triangle::rayIntersection(Ray &r)
 	if (v < 0.0 || u + v > 1.0)
 		return false;
 	
-	double t = (edge2 * Q) * f;
+	double t = glm::dot(glm::dot(edge2, Q), f);
 
 	//Check if the hit is behind of rays startposition.
 	if (t <= EPSILON || t > 1 - EPSILON)
 		return false;
 
 
-	Vertex rayHitPosition = rayStart + D * t;
-	r.setEnd(rayHitPosition, this); // sets new end position and this triangle as hitted surface.
+	Direction rayHitPosition = Direction(rayStart) + t * D;
+	r.setEnd(Vertex(rayHitPosition.x, rayHitPosition.y, rayHitPosition.z ,1), this); // sets new end position and this triangle as hitted surface.
 	r.setColor(this->color);
 
 	return true;

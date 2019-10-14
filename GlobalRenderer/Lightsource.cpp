@@ -5,10 +5,10 @@
 Lightsource::Lightsource(Vertex pos)
 	: position(pos)
 {
-	v0 = pos + Vertex(-1, -1, 0);
-	v1 = pos + Vertex(-1, 1, 0);
-	v2 = pos + Vertex(1, -1, 0);
-	v3 = pos + Vertex(1, 1, 0);
+	v0 = pos + Vertex(-1, -1, 0, 1);
+	v1 = pos + Vertex(-1, 1, 0, 1);
+	v2 = pos + Vertex(1, -1, 0, 1);
+	v3 = pos + Vertex(1, 1, 0, 1);
 
 
 	color = whiteLight;

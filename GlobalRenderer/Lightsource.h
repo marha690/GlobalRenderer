@@ -2,7 +2,6 @@
 
 #include "Triangle.h"
 #include "Ray.h"
-
 #include "Definitions.h"
 
 class Lightsource

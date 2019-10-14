@@ -39,35 +39,34 @@ void Camera::render(Scene *s)
 			//Calculations for light.
 
 			// from traingle to lightsource.
-			Ray *shadowRay = new Ray(ray->getEnd(), s->lightsource.position);
+			//Ray *shadowRay = new Ray(ray->getEnd(), s->lightsource.position);
 
 
-			// Give ray no color if the target is in shadows!
-			if(s->isIntersected(shadowRay))
-				ray->setColor(Color(0,0,0));
+			//// Give ray no color if the target is in shadows!
+			//if(s->isIntersected(shadowRay))
+			//	ray->setColor(Color(0,0,0));
 
 
-			//localLightContribution:
-			Triangle *triangle = ray->getTriangle();
+			////localLightContribution:
+			//Triangle *triangle = ray->getTriangle();
 
-			if (!triangle) {
-				continue;
-				//std::cout << "ray does not hit a triangle.\n";
-			}
+			//if (!triangle) {
+			//	continue;
+			//	//std::cout << "ray does not hit a triangle.\n";
+			//}
 
+			//Vertex Z = glm::normalize(triangle->getNormal());
+			//Vertex IT = glm::normalize(ray->getDirection()) - (glm::normalize(ray->getDirection()) * Z) * Z;
+			//Vertex X = IT / glm::abs(IT);
+			//Vertex Y = (-1 * X)^ Z;
 
-			Vertex Z = triangle->getNormal().normalize();
-			Vertex IT = ray->getDirection().normalize() - (ray->getDirection().normalize() * Z) * Z;
-			Vertex X = IT / IT.magnitude();
-			Vertex Y = (-1 * X)^ Z;
+			//glm::mat4x4 local{ X.x, X.y, X.z, 0, Y.x, Y.y, Y.z, 0, Z.x, Z.y, Z.z, 0, 0, 0, 0, 1};
+			//glm::mat4x4 translation{0, 0, 0, -(ray->getEnd().x),
+			//					    0, 1, 0, -(ray->getEnd().y),
+			//					    0 ,0 , 1, -(ray->getEnd().z),
+			//					    0, 0 ,0 ,1};
 
-			glm::mat4x4 local{ X.x, X.y, X.z, 0, Y.x, Y.y, Y.z, 0, Z.x, Z.y, Z.z, 0, 0, 0, 0, 1};
-			glm::mat4x4 translation{0, 0, 0, -(ray->getEnd().x),
-								    0, 1, 0, -(ray->getEnd().y),
-								    0 ,0 , 1, -(ray->getEnd().z),
-								    0, 0 ,0 ,1};
-
-			glm::mat4x4 M = local * translation;
+			//glm::mat4x4 M = local * translation;
 
 
 			//Vertex u = Z.normalize();
@@ -98,11 +97,12 @@ Ray* Camera::createPixelRays(int x, int y)
 	double pixelWidth = (double(viewWidth) / double(pixelsHorizontaly));
 	double pixelHeight = (double(viewHeight) / double(pixelsVericaly));
 
-	Vertex pixelPosition = Vertex( 0, (viewWidth / 2) - x*pixelWidth, (viewHeight / 2) - y*pixelHeight);
+	Vertex pixelPosition = Vertex( 0, (viewWidth / 2) - x*pixelWidth, (viewHeight / 2) - y*pixelHeight, 1);
 
 	//Create ray for the pixel
 	Ray *myRay = new Ray(startPosition, pixelPosition);
-	myRay->setEnd( myRay->getDirection().normalize() * 1000, nullptr );
+	Vertex end = glm::normalize(myRay->getDirection());
+	myRay->setEnd( end *= 1000, nullptr );
 
 	//Connect the ray to that pixel.
 	pixels[x + pixelsVericaly * y].connectRay(myRay);

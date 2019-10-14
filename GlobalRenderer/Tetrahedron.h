@@ -16,10 +16,10 @@ public:
 	Triangle triangles[4];
 private:
 	Color color;
-	Vertex v0 = Vertex(0, 0, 0);
-	Vertex v1 = Vertex(0, 0, 2);
-	Vertex v2 = Vertex(0, std::sqrt(3), 1);
-	Vertex v3 = Vertex(-std::sqrt(3), 1 / std::sqrt(3), 1);
+	Vertex v0 = Vertex(0, 0, 0, 1);
+	Vertex v1 = Vertex(0, 0, 2, 1);
+	Vertex v2 = Vertex(0, std::sqrt(3), 1, 1);
+	Vertex v3 = Vertex(-std::sqrt(3), 1 / std::sqrt(3), 1, 1);
 
 	//Functions
 public:

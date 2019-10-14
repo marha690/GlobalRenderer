@@ -6,7 +6,7 @@
 
 Sphere::Sphere()
 {
-	center = Vertex(0,0,0);
+	center = Vertex(0,0,0,1);
 	color = Color(251,251,251);
 }
 
@@ -29,17 +29,17 @@ void Sphere::transform(Vertex tr)
 
 void Sphere::transform(double x, double y, double z)
 {
-	transform(Vertex(x, y, x));
+	transform(Vertex(x, y, x, 1));
 }
 
 bool Sphere::rayIntersection(Ray &r) 
 {
 	Vertex start = r.getStart();
-	Vertex direction = r.getDirection().normalize();
+	Vertex d= glm::normalize(r.getDirection());
 
-	double a = direction * direction;
-	double b = 2 * (direction*(start - center));
-	double c = (start - center) * (start - center) - (radius*radius);
+	double a = glm::dot(d, d);
+	double b = 2 * (glm::dot(d, (start - center)));
+	double c = glm::dot((start - center), (start - center)) - (radius*radius);
 
 	double sqrtTerm = std::sqrt(((b / 2)*(b / 2)) - a * c);
 	double firstTerm = -(b / 2);
@@ -47,11 +47,11 @@ bool Sphere::rayIntersection(Ray &r)
 	double scalarPositive = firstTerm + sqrtTerm;
 	double scalarNegative = firstTerm - sqrtTerm;
 
-	Vertex sphereHit1 = start +  direction * scalarPositive; //potental intersection with the sphere.
-	Vertex sphereHit2 = start + direction * scalarNegative; //potential intersection with the sphere.
+	Vertex sphereHit1 = start + d * scalarPositive; //potental intersection with the sphere.
+	Vertex sphereHit2 = start + d * scalarNegative; //potential intersection with the sphere.
 
 	double myEPSILON = 0.000001;
-	if ((sphereHit1 - center)*(sphereHit1 - center) - (radius*radius) < myEPSILON) {
+	if (glm::dot((sphereHit1 - center), (sphereHit1 - center)) - (radius*radius) < myEPSILON) {
 		r.setEnd(sphereHit1, nullptr);
 		r.setColor(this->color);
 		return true;

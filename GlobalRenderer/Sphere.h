@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Ray.h"
-#include "Vertex.h"
 #include "Definitions.h"
 
 
