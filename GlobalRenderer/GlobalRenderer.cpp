@@ -38,6 +38,22 @@ void loopUpdate(sf::RenderWindow &_window, sf::Sprite &_sprite)
 	}
 }
 
+sf::Color toSFLinear(Color c, double min, double max ) {
+
+	//Normalize colors
+	double red = (c.r - min) / (max); //Norm between 0 and 1.
+	double green = (c.g - min) / (max); //Norm between 0 and 1.
+	double blue = (c.b - min) / (max); //Norm between 0 and 1.
+
+	//Make them to range between 0 and 255 (8bits since sf::Color has 8bits color-input).
+	red *= 255;
+	green *= 255;
+	blue *= 255;
+
+	return sf::Color((int)red, (int)green, (int)blue);
+}
+
+
 //updates window.
 void updateWindow(sf::RenderWindow &_window, sf::Sprite &_sprite, sf::Texture &_texture, sf::Image &_image)
 {
@@ -51,7 +67,9 @@ void setImagePixels(sf::Image &_image, Camera &camera, double min, double max)
 {
 	for (int y = 0; y < CONSTANTS::screenSize_Y; y++) {
 		for (int x = 0; x < CONSTANTS::screenSize_X; x++) {
-			sf::Color color = camera.pixels[x + CONSTANTS::screenSize_Y* y].color.toSFLinear(0, max);
+			Color internalColor = camera.pixels[x + CONSTANTS::screenSize_Y* y].color;
+
+			sf::Color color = toSFLinear(internalColor, 0, max);
 			_image.setPixel(x, y, color);
 		}
 	}

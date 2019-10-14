@@ -8,14 +8,14 @@ class Tetrahedron
 public:
 	//Constructors & destructors
 	Tetrahedron();
-	Tetrahedron(Vertex pos, MyColor _color);
+	Tetrahedron(Vertex pos, Color _color);
 	~Tetrahedron();
 
 	//Variables
 public:
 	Triangle triangles[4];
 private:
-	MyColor color;
+	Color color;
 	Vertex v0 = Vertex(0, 0, 0);
 	Vertex v1 = Vertex(0, 0, 2);
 	Vertex v2 = Vertex(0, std::sqrt(3), 1);

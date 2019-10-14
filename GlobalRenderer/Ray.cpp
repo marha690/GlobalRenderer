@@ -2,13 +2,12 @@
 #include "Ray.h"
 
 
-
 //Constructor
 Ray::Ray(Vertex _startPoint, Vertex _endPoint)
 {
 	start = _startPoint;
 	end = _endPoint;
-	color = MyColor(250, 0, 250);
+	color = Color(250, 0, 250);
 }
 
 

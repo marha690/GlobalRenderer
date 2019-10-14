@@ -5,20 +5,20 @@
 // Constructor
 Scene::Scene()
 {
-	MyColor white = MyColor(255, 255, 255);
-	MyColor black = MyColor(2, 2, 2);
+	Color white = Color(255, 255, 255);
+	Color black = Color(2, 2, 2);
 
-	MyColor green = MyColor(0, 155, 0);
-	MyColor lightGreen = MyColor(0, 255, 0);
-	MyColor blue = MyColor(0, 0, 155);
-	MyColor lightBlue = MyColor(0, 0, 255);
-	MyColor red = MyColor(155, 0, 0);
-	MyColor lightRed = MyColor(255, 0, 0);
+	Color green = Color(0, 155, 0);
+	Color lightGreen = Color(0, 255, 0);
+	Color blue = Color(0, 0, 155);
+	Color lightBlue = Color(0, 0, 255);
+	Color red = Color(155, 0, 0);
+	Color lightRed = Color(255, 0, 0);
 
-	MyColor pink = MyColor(255, 192, 203);
-	MyColor cyan = MyColor(153, 230, 179);
-	MyColor sponge = MyColor(253, 254, 3);
-	MyColor mossgreen = MyColor(53, 94, 59);
+	Color pink = Color(255, 192, 203);
+	Color cyan = Color(153, 230, 179);
+	Color sponge = Color(253, 254, 3);
+	Color mossgreen = Color(53, 94, 59);
 
 	//Initialize the triangles for the room.
 	{

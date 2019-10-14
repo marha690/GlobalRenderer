@@ -2,27 +2,26 @@
 
 #include "Ray.h"
 #include "Vertex.h"
-#include "MyColor.h"
+#include "Definitions.h"
 
-class MyColor;
 
 class Sphere
 {
 public:
 	//Constructors & destructors
 	Sphere();
-	Sphere(Vertex _center, double _radius, MyColor _c);
+	Sphere(Vertex _center, double _radius, Color _c);
 	~Sphere();
 
 	//Variables
 private:
 	Vertex center;
 	double radius = 0.5;
-	MyColor color;
+	Color color;
 	
 	//Getters
 public:
-	MyColor getColor() { return color; }
+	Color getColor() { return color; }
 
 	//Functions
 public: 

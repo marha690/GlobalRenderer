@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "Vertex.h"
 #include "Pixel.h"
 #include "Scene.h"

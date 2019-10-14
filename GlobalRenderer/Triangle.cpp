@@ -5,7 +5,7 @@
 Triangle::Triangle() {
 }
 
-Triangle::Triangle(Vertex _v0, Vertex _v1, Vertex _v2, MyColor _color)
+Triangle::Triangle(Vertex _v0, Vertex _v1, Vertex _v2, Color _color)
 	: v0(_v0), v1(_v1), v2(_v2), color(_color)
 {
 	setNormal(v0, v1, v2);

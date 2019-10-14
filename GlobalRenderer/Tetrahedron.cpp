@@ -4,14 +4,14 @@
 //Constructors & destructors
 Tetrahedron::Tetrahedron()
 {
-	MyColor color = MyColor(1, 1, 1);
+	Color color = Color(1, 1, 1);
 	triangles[0] = Triangle(v0, v1, v2, color);
 	triangles[1] = Triangle(v1, v2, v3, color);
 	triangles[2] = Triangle(v2, v3, v0, color);
 	triangles[3] = Triangle(v3, v0, v1, color);
 }
 
-Tetrahedron::Tetrahedron(Vertex pos, MyColor _color)
+Tetrahedron::Tetrahedron(Vertex pos, Color _color)
 {
 	triangles[0] = Triangle(v0,v1,v2, _color);
 	triangles[1] = Triangle(v1,v2,v3, _color);

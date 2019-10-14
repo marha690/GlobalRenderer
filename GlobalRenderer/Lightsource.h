@@ -1,8 +1,9 @@
 #pragma once
 
-#include "myColor.h"
 #include "Triangle.h"
 #include "Ray.h"
+
+#include "Definitions.h"
 
 class Lightsource
 {
@@ -14,14 +15,14 @@ public:
 
 	//Variables
 public:
-	MyColor color;
+	Color color;
 	Vertex position;
 private:
 	Vertex v0, v1, v2, v3;
 	Triangle triangles[2];
 
 	double L0 = 500;
-	MyColor whiteLight = MyColor(L0, L0, L0);
+	Color whiteLight = Color(L0, L0, L0);
 	
 	//Functions
 public:

@@ -7,10 +7,10 @@
 Sphere::Sphere()
 {
 	center = Vertex(0,0,0);
-	color = MyColor(251,251,251);
+	color = Color(251,251,251);
 }
 
-Sphere::Sphere(Vertex _center, double _radius, MyColor _c)
+Sphere::Sphere(Vertex _center, double _radius, Color _c)
 {
 	radius = _radius;
 	center = _center;

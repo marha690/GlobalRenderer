@@ -44,7 +44,7 @@ void Camera::render(Scene *s)
 
 			// Give ray no color if the target is in shadows!
 			if(s->isIntersected(shadowRay))
-				ray->setColor(MyColor(0,0,0));
+				ray->setColor(Color(0,0,0));
 
 
 			//localLightContribution:
@@ -114,7 +114,7 @@ double Camera::maxColorValue()
 	double max = 0;
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
-			MyColor c = pixels[x + pixelsVericaly * y].ray->getColor();
+			Color c = pixels[x + pixelsVericaly * y].ray->getColor();
 
 			if (c.r > max)
 				max = c.r;
