@@ -34,28 +34,51 @@ void Sphere::transform(double x, double y, double z)
 
 bool Sphere::rayIntersection(Ray &r) 
 {
-	Vertex start = r.getStart();
-	Vertex d= glm::normalize(r.getDirection());
+	Vertex o = r.getStart();
+	Vertex c = center;
+	Vertex l = r.getDirection();
 
-	double a = glm::dot(d, d);
-	double b = 2 * (glm::dot(d, (start - center)));
-	double c = glm::dot((start - center), (start - center)) - (radius*radius);
+	l = glm::normalize(l);
 
-	double sqrtTerm = std::sqrt(((b / 2)*(b / 2)) - a * c);
-	double firstTerm = -(b / 2);
+	
+	Direction oc = o - c;
+	
+	double b = glm::dot(2.0*l, Vertex(oc, 1));
 
-	double scalarPositive = firstTerm + sqrtTerm;
-	double scalarNegative = firstTerm - sqrtTerm;
+	double ac = glm::dot((oc), (oc)) - (radius*radius);
 
-	Vertex sphereHit1 = start + d * scalarPositive; //potental intersection with the sphere.
-	Vertex sphereHit2 = start + d * scalarNegative; //potential intersection with the sphere.
+	double d1 = -(b / 2.0);
 
-	double myEPSILON = 0.000001;
-	if (glm::dot((sphereHit1 - center), (sphereHit1 - center)) - (radius*radius) < myEPSILON) {
-		r.setEnd(sphereHit1, nullptr);
+	double sqrtTerm = glm::pow(d1,2) - ac;
+
+
+	if (sqrtTerm < CONSTANTS::EPSILON) return false;
+
+	sqrtTerm = glm::sqrt(sqrtTerm);
+
+	double d2 = d1;
+
+	d1 += sqrtTerm;
+	d2 -= sqrtTerm;
+
+
+	if (d1 > CONSTANTS::EPSILON) {
+		Vertex temp = o + d1 * l;
+		IntersectionData *data = new IntersectionData(temp, glm::normalize(temp - center), Surface::specular);
+		r.setEnd(temp);
+		r.setHitData(data);
 		r.setColor(this->color);
 		return true;
 	}
+	else if (d2 > CONSTANTS::EPSILON) {
+		Vertex temp = o + d2 * l;
+		IntersectionData *data = new IntersectionData(temp, glm::normalize(temp - center), Surface::specular);
+		r.setEnd(temp);
+		r.setHitData(data);
+		r.setColor(this->color);
+		return true;
+	}
+
 
 	return false;
 }

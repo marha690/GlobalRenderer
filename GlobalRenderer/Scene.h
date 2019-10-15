@@ -29,4 +29,6 @@ public:
 	void intersection(Ray *ray);
 
 	bool isIntersected(Ray *ray);
+
+	Color getDiffuseLightContribution(const Vertex & point, const Direction & normal);
 };

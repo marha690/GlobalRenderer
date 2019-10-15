@@ -7,6 +7,7 @@
 #include <vec3.hpp>
 #include <vec4.hpp>
 #include <mat4x4.hpp>
+#include <matrix_transform.hpp>
 
 Camera::Camera(int pxX, int pxY, Eye eye = Eye::EYE_ONE)
 {
@@ -36,55 +37,39 @@ void Camera::render(Scene *s)
 
 			s->intersection(ray); //Checks if it intersects
 
-			//Calculations for light.
 
-			// from traingle to lightsource.
-			//Ray *shadowRay = new Ray(ray->getEnd(), s->lightsource.position);
+			Ray *shadowRay = new Ray(ray->getEnd(), s->lightsource.position);
 
+			if(s->isIntersected(shadowRay))
+				ray->setColor(Color(0,0,0));
 
-			//// Give ray no color if the target is in shadows!
-			//if(s->isIntersected(shadowRay))
-			//	ray->setColor(Color(0,0,0));
+			//FakeLight: the faces which is at the direction of the light is stonger that those which are not. With witted ray trcing.
+			//this does not make sence so i think i have implemented it wrong.
+			bool useThis = false;
+			if(useThis)
+			{
+				IntersectionData *data = ray->getHitData();
+				if (!data) { // Safe for dead pixels.
+					continue;
+				}
 
+				Direction Z = glm::normalize(data->normal);
+				Direction I = glm::normalize(Direction(ray->getDirection().x, ray->getDirection().y, ray->getDirection().z));
+				Direction IT = I - glm::dot(I, Z) * Z;
+				Direction X = IT / glm::abs(IT);
+				Direction Y = glm::cross(-X, Z);
+				glm::mat4 Tr = glm::translate(glm::mat4(1.0), glm::vec3(ray->getEnd().x, ray->getEnd().y, ray->getEnd().z));
 
-			////localLightContribution:
-			//Triangle *triangle = ray->getTriangle();
-
-			//if (!triangle) {
-			//	continue;
-			//	//std::cout << "ray does not hit a triangle.\n";
-			//}
-
-			//Vertex Z = glm::normalize(triangle->getNormal());
-			//Vertex IT = glm::normalize(ray->getDirection()) - (glm::normalize(ray->getDirection()) * Z) * Z;
-			//Vertex X = IT / glm::abs(IT);
-			//Vertex Y = (-1 * X)^ Z;
-
-			//glm::mat4x4 local{ X.x, X.y, X.z, 0, Y.x, Y.y, Y.z, 0, Z.x, Z.y, Z.z, 0, 0, 0, 0, 1};
-			//glm::mat4x4 translation{0, 0, 0, -(ray->getEnd().x),
-			//					    0, 1, 0, -(ray->getEnd().y),
-			//					    0 ,0 , 1, -(ray->getEnd().z),
-			//					    0, 0 ,0 ,1};
-
-			//glm::mat4x4 M = local * translation;
-
-
-			//Vertex u = Z.normalize();
-			//Vertex v = shadowRay->getDirection().normalize();
-			////std::cout << "shadowray: " << v << ".\n";
-			////std::cout << "Triangle normal: " << u << ".\n";
-
-			//double angle = std::acos((u * v) / (u.magnitude() * v.magnitude()));
-			////std::cout << "acos: " << angle << ".\n";
-
-			//double kd = 2;
-
-			//if (angle > 3.14 / 2) {
-			//	ray->setColor(ray->getColor() * kd * angle);
-			//}
-
-
-
+				Vertex u = Tr * shadowRay->getDirection();
+				Vertex N = Vertex(0, 0, 1, 1); //Normal in Local coordinate system.
+				//std::cout << u.x << ", " << u.y << ", " << u.z << ".\n";
+				double num = glm::dot(u, N);
+				double det = (u.length() * N.length());
+				double angle = (num / det);
+				double kd = 2;
+				ray->setColor(ray->getColor() * kd * angle);
+			}
+			
 		}
 		std::cout << "\rProgress: " << (y / (pixelsVericaly / 100)) << "%";
 	}
@@ -102,7 +87,7 @@ Ray* Camera::createPixelRays(int x, int y)
 	//Create ray for the pixel
 	Ray *myRay = new Ray(startPosition, pixelPosition);
 	Vertex end = glm::normalize(myRay->getDirection());
-	myRay->setEnd( end *= 1000, nullptr );
+	myRay->setEnd( end *= 1000);
 
 	//Connect the ray to that pixel.
 	pixels[x + pixelsVericaly * y].connectRay(myRay);

@@ -105,7 +105,7 @@ int main()
 	camera.setInternalPixelColors();
 
 	setImagePixels(image, camera,0, camera.maxColorValue());
-
+	std::cout << camera.maxColorValue();
 	updateWindow(window, sprite, texture, image);
 
 	std::cout << "Image finished.\n";

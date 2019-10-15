@@ -99,8 +99,13 @@ bool Scene::isIntersected(Ray *ray)
 		return true;
 
 	//Sphere
-	if (sphere.rayIntersection(*ray)) //Returns null for hit triangle!
+	if (sphere.rayIntersection(*ray))
 		return true;
 
 	return false;
+}
+
+Color Scene::getDiffuseLightContribution(const Vertex &point, const Direction &normal)
+{
+	return Color(0, 0, 0);
 }
