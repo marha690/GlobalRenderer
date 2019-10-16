@@ -32,44 +32,36 @@ void Camera::render(Scene *s)
 {
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
-			Ray *ray;
-			ray = createPixelRays(x, y); //Create rays for the pixel.
 
-			s->intersection(ray); //Checks if it intersects
+			//First ray!
+			Ray *ray = createPixelRay(x, y); //Create rays for the pixel.
+			s->intersection(ray); 
 
 
+			//Shadow!
 			Ray *shadowRay = new Ray(ray->getEnd(), s->lightsource.position);
-
-			if(s->isIntersected(shadowRay))
+			if (s->isIntersected(shadowRay)) {
 				ray->setColor(Color(0,0,0));
-
-			//FakeLight: the faces which is at the direction of the light is stonger that those which are not. With witted ray trcing.
-			//this does not make sence so i think i have implemented it wrong.
-			bool useThis = false;
-			if(useThis)
-			{
-				IntersectionData *data = ray->getHitData();
-				if (!data) { // Safe for dead pixels.
-					continue;
-				}
-
-				Direction Z = glm::normalize(data->normal);
-				Direction I = glm::normalize(Direction(ray->getDirection().x, ray->getDirection().y, ray->getDirection().z));
-				Direction IT = I - glm::dot(I, Z) * Z;
-				Direction X = IT / glm::abs(IT);
-				Direction Y = glm::cross(-X, Z);
-				glm::mat4 Tr = glm::translate(glm::mat4(1.0), glm::vec3(ray->getEnd().x, ray->getEnd().y, ray->getEnd().z));
-
-				Vertex u = Tr * shadowRay->getDirection();
-				Vertex N = Vertex(0, 0, 1, 1); //Normal in Local coordinate system.
-				//std::cout << u.x << ", " << u.y << ", " << u.z << ".\n";
-				double num = glm::dot(u, N);
-				double det = (u.length() * N.length());
-				double angle = (num / det);
-				double kd = 2;
-				ray->setColor(ray->getColor() * kd * angle);
 			}
-			
+
+			if (ray->getHitData()) {
+
+				int c = 0; //Simple way to stop rays.
+				Ray *temp = ray;
+				while (ray->getHitData() && ray->getHitData()->sufaceType == Surface::specular && c < 5) {
+					
+					ray->setColor(Color(10, 10, 10)); //No local color from this hit!
+
+					Ray *reflected = ray->perfectBounce();
+
+					ray->reflectedRay = reflected;
+					s->intersection(reflected);
+
+					ray = ray->reflectedRay;
+					c++;
+				}
+			}
+
 		}
 		std::cout << "\rProgress: " << (y / (pixelsVericaly / 100)) << "%";
 	}
@@ -77,7 +69,7 @@ void Camera::render(Scene *s)
 }
 
 //Connects pixel with the rays which is projected inside it.
-Ray* Camera::createPixelRays(int x, int y) 
+Ray* Camera::createPixelRay(int x, int y) 
 {
 	double pixelWidth = (double(viewWidth) / double(pixelsHorizontaly));
 	double pixelHeight = (double(viewHeight) / double(pixelsVericaly));
@@ -99,7 +91,7 @@ double Camera::maxColorValue()
 	double max = 0;
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
-			Color c = pixels[x + pixelsVericaly * y].ray->getColor();
+			Color c = pixels[x + pixelsVericaly * y].color;
 
 			if (c.r > max)
 				max = c.r;
@@ -117,7 +109,19 @@ void Camera::setInternalPixelColors()
 {
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
-			pixels[x + pixelsVericaly * y].color = pixels[x + pixelsVericaly * y].ray->getColor();
+
+			Pixel *p = &pixels[x + pixelsVericaly * y];
+
+			Color pixelColor = Color(0, 0, 0);
+
+			//Retrieve value from ray to give the pixel its color.
+			Ray *temp = p->ray;
+			while (temp) {
+				pixelColor += temp->getColor();
+				temp = temp->reflectedRay;
+			}
+
+			p->color = pixelColor;
 		}
 	}
 }

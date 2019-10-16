@@ -76,7 +76,7 @@ bool Triangle::rayIntersection(Ray &r)
 	Direction rayHitPosition = Direction(rayStart) + t * D;
 	Vertex point = Vertex(rayHitPosition.x, rayHitPosition.y, rayHitPosition.z, 1);
 	r.setEnd(point); // sets new end position and this triangle as hitted surface.
-	IntersectionData *data = new IntersectionData(point, normal, Surface::specular);
+	IntersectionData *data = new IntersectionData(point, normal, Surface::diffuse);
 	r.setHitData(data);
 	r.setColor(this->color);
 

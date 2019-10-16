@@ -42,43 +42,49 @@ bool Sphere::rayIntersection(Ray &r)
 
 	
 	Direction oc = o - c;
-	
-	double b = glm::dot(2.0*l, Vertex(oc, 1));
-
+	double b = 2.0 * glm::dot(l, Vertex(oc, 1));
 	double ac = glm::dot((oc), (oc)) - (radius*radius);
 
-	double d1 = -(b / 2.0);
+	double d = -(b / 2.0);
 
-	double sqrtTerm = glm::pow(d1,2) - ac;
+	double sqrtTerm = glm::pow(d,2) - ac;
 
-
+	//Dont make it complex!
 	if (sqrtTerm < CONSTANTS::EPSILON) return false;
 
 	sqrtTerm = glm::sqrt(sqrtTerm);
 
-	double d2 = d1;
+	double distance1 = d + sqrtTerm;
+	double distance2 = d - sqrtTerm;
 
-	d1 += sqrtTerm;
-	d2 -= sqrtTerm;
+	Vertex hit1 = o + distance1 * l;
+	Vertex hit2 = o + distance2 * l;
 
+	//Ugly but works
+	if (distance1 > CONSTANTS::EPSILON && hit1.length() < hit2.length()) {
 
-	if (d1 > CONSTANTS::EPSILON) {
-		Vertex temp = o + d1 * l;
-		IntersectionData *data = new IntersectionData(temp, glm::normalize(temp - center), Surface::specular);
-		r.setEnd(temp);
+		if ((r.getEnd() - r.getStart()).length() > hit1.length())
+			return false;
+
+		IntersectionData *data = new IntersectionData(hit1, glm::normalize(hit1 - center), Surface::specular);
+		r.setEnd(hit1);
 		r.setHitData(data);
+		r.setSurfaceType(Surface::specular);
 		r.setColor(this->color);
 		return true;
 	}
-	else if (d2 > CONSTANTS::EPSILON) {
-		Vertex temp = o + d2 * l;
-		IntersectionData *data = new IntersectionData(temp, glm::normalize(temp - center), Surface::specular);
-		r.setEnd(temp);
+	else if (distance2 > CONSTANTS::EPSILON) {
+
+		if ((r.getEnd() - r.getStart()).length() > hit2.length())
+			return false;
+
+		IntersectionData *data = new IntersectionData(hit2, glm::normalize(hit2 - center), Surface::specular);
+		r.setEnd(hit2);
 		r.setHitData(data);
+		r.setSurfaceType(Surface::specular);
 		r.setColor(this->color);
 		return true;
 	}
-
 
 	return false;
 }

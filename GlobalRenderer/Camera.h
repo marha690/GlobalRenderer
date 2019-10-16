@@ -37,7 +37,7 @@ public:
 
 	void render(Scene *s);
 
-	Ray* createPixelRays(int x, int y);
+	Ray* createPixelRay(int x, int y);
 
 	double maxColorValue();
 

@@ -20,7 +20,7 @@ private:
 	Vertex v0, v1, v2, v3;
 	Triangle triangles[2];
 
-	double L0 = 500;
+	double L0 = 255;
 	Color whiteLight = Color(L0, L0, L0);
 	
 	//Functions

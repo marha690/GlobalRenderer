@@ -6,6 +6,7 @@
 #include "IntersectionData.h"
 
 class Triangle;
+class Ray;
 
 class Ray
 {
@@ -15,6 +16,13 @@ public:
 	~Ray();
 
 	//Variables.
+public:
+	//Tree
+	Ray *refractedRay = nullptr;
+	Ray *reflectedRay = nullptr;
+	Ray *parent = nullptr;
+	double importance = 0;
+
 private:
 	Vertex start;
 	Vertex end;
@@ -22,11 +30,13 @@ private:
 	IntersectionData *hit = nullptr;
 
 
+
 	//Setters
 public:
 	void setEnd(Vertex _end) { end = _end;}
 	void setHitData(IntersectionData *d) { hit = d; }
 	void setColor(Color c) { color = c; }
+	void setSurfaceType(Surface s);
 private:
 	void setStart(Vertex _start) { start = _start; }
 
@@ -41,7 +51,11 @@ public:
 	//Other Functions
 public:
 	void print();
+	void printRayTree();
 	friend std::ostream& operator<<(std::ostream& os, const Ray& v);
 
+	Ray* perfectBounce();
+
+	Ray * randomBounce();
 
 };

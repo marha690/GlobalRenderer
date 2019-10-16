@@ -30,8 +30,10 @@ bool Tetrahedron::rayIntersection(Ray &r) {
 	bool hit = false;
 
 	for (int i = 0; i < 4; i++) {
-		if (triangles[i].rayIntersection(r))
+		if (triangles[i].rayIntersection(r)) {
+			r.setSurfaceType(Surface::specular);
 			hit = true;
+		}
 	}
 
 	return hit;
