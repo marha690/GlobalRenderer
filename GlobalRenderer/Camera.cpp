@@ -38,27 +38,49 @@ void Camera::render(Scene *s)
 			s->intersection(ray); 
 
 
-			//Shadow!
-			Ray *shadowRay = new Ray(ray->getEnd(), s->lightsource.position);
-			if (s->isIntersected(shadowRay)) {
-				ray->setColor(Color(0,0,0));
-			}
 
 			if (ray->getHitData()) {
-
-				int c = 0; //Simple way to stop rays.
 				Ray *temp = ray;
+
+				//Specular surface!
+				int c = 0; //Simple way to stop rays from being infinitive amount.
 				while (ray->getHitData() && ray->getHitData()->sufaceType == Surface::specular && c < 5) {
 					
-					ray->setColor(Color(10, 10, 10)); //No local color from this hit!
+					ray->reflectedRay = ray->perfectBounce();
+					s->intersection(ray->reflectedRay);
 
-					Ray *reflected = ray->perfectBounce();
-
-					ray->reflectedRay = reflected;
-					s->intersection(reflected);
 
 					ray = ray->reflectedRay;
+					ray->parent = temp;
+					temp = ray;
 					c++;
+				}
+				
+
+
+				//We have found our rays. Make a shadow ray for the last hit.
+				Ray *shadowRay = new Ray(temp->getEnd(), s->lightsource.position);
+				if (s->isIntersected(shadowRay)) {
+					temp->setColor(Color(0, 0, 0));
+				} 
+				else {
+
+					//Make Lambertian reflection?
+
+					double p = 0.6; //Between 0 and 1.
+					double BRDF = p / CONSTANTS::PI;
+
+					Direction light = glm::normalize(Direction(shadowRay->getDirection()));
+					Direction normal = glm::normalize(temp->getHitData()->normal);
+
+					double cosAngle = glm::dot(light, normal);
+
+					if (cosAngle < 0)
+						cosAngle = 0;
+
+					double L = BRDF * s->lightsource.L0 * cosAngle;
+					//std::cout << "Angle: " << cosAngle << std::endl;
+					temp->setColor(temp->getColor() * L);
 				}
 			}
 
@@ -112,16 +134,34 @@ void Camera::setInternalPixelColors()
 
 			Pixel *p = &pixels[x + pixelsVericaly * y];
 
-			Color pixelColor = Color(0, 0, 0);
-
-			//Retrieve value from ray to give the pixel its color.
-			Ray *temp = p->ray;
-			while (temp) {
-				pixelColor += temp->getColor();
-				temp = temp->reflectedRay;
-			}
-
-			p->color = pixelColor;
+			p->color = getColorForPixel(p);
 		}
 	}
+}
+
+Color Camera::getColorForPixel(Pixel *p) {
+
+	Color pixelColor = Color(0, 0, 0);
+
+	//Retrieve value from ray to give the pixel its color.
+	Ray *temp = p->ray;
+
+	//Get last ray in the tree.
+	while (temp->reflectedRay) {
+		temp = temp->reflectedRay;
+	}
+
+
+	pixelColor = temp->getColor(); //Get the color of the last ray.
+
+	////Adds a small diffuse thing to every ray.
+	//while (temp->parent) {
+	//	temp = temp->parent;
+
+	//	pixelColor = pixelColor + temp->getColor() * 0.03;
+	//}
+
+
+
+	return pixelColor;
 }

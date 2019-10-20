@@ -18,9 +18,9 @@ public:
 
 	// Variables
 private:
+	Direction normal;
 	Vertex v0, v1, v2; // corners of the triangle
 	Color color;
-	Direction normal;
 
 	double EPSILON = 0.0000001;
 	//Setters

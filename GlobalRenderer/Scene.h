@@ -17,6 +17,7 @@ public:
 	//Variables
 	Tetrahedron tetrahedron;
 	Sphere sphere;
+	Sphere sphere2;
 	Lightsource lightsource;
 	Room room;
 
@@ -31,7 +32,6 @@ public:
 
 	bool isIntersected(Ray *ray);
 
-	Color getDiffuseLightContribution(const Vertex & point, const Direction & normal);
 
 private:
 	Color white = Color(255, 255, 255);

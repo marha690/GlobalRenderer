@@ -16,11 +16,11 @@ public:
 public:
 	Color color;
 	Vertex position;
+	double L0 = 10;
 private:
 	Vertex v0, v1, v2, v3;
 	Triangle triangles[2];
 
-	double L0 = 255;
 	Color whiteLight = Color(L0, L0, L0);
 	
 	//Functions

@@ -22,6 +22,7 @@ public:
 	Ray *reflectedRay = nullptr;
 	Ray *parent = nullptr;
 	double importance = 0;
+	double radiance = 0;
 
 private:
 	Vertex start;

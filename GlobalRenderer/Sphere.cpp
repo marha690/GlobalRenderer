@@ -10,11 +10,12 @@ Sphere::Sphere()
 	color = Color(251,251,251);
 }
 
-Sphere::Sphere(Vertex _center, double _radius, Color _c)
+Sphere::Sphere(Vertex _center, double _radius, Color _c, Surface s)
 {
 	radius = _radius;
 	center = _center;
 	color = _c;
+	surface = s;
 }
 
 Sphere::~Sphere()
@@ -42,10 +43,10 @@ bool Sphere::rayIntersection(Ray &r)
 
 	
 	Direction oc = o - c;
-	double b = 2.0 * glm::dot(l, Vertex(oc, 1));
+	double b = 2.0f * glm::dot(l, Vertex(oc, 1));
 	double ac = glm::dot((oc), (oc)) - (radius*radius);
 
-	double d = -(b / 2.0);
+	double d = -(b / 2.0f);
 
 	double sqrtTerm = glm::pow(d,2) - ac;
 
@@ -69,7 +70,7 @@ bool Sphere::rayIntersection(Ray &r)
 		IntersectionData *data = new IntersectionData(hit1, glm::normalize(hit1 - center), Surface::specular);
 		r.setEnd(hit1);
 		r.setHitData(data);
-		r.setSurfaceType(Surface::specular);
+		r.setSurfaceType(surface);
 		r.setColor(this->color);
 		return true;
 	}
@@ -81,7 +82,7 @@ bool Sphere::rayIntersection(Ray &r)
 		IntersectionData *data = new IntersectionData(hit2, glm::normalize(hit2 - center), Surface::specular);
 		r.setEnd(hit2);
 		r.setHitData(data);
-		r.setSurfaceType(Surface::specular);
+		r.setSurfaceType(surface);
 		r.setColor(this->color);
 		return true;
 	}

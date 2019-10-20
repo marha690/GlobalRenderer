@@ -5,13 +5,14 @@
 // Constructor
 Scene::Scene()
 {
-	room = Room();
 
 	tetrahedron = Tetrahedron(Vertex(5, 2, 0, 1), lightRed);
 
-	sphere = Sphere(Vertex(4, -2, -2, 1), 1.5, lightGreen);
+	sphere = Sphere(Vertex(4, -2, -2, 1), 1.5, lightGreen, Surface::specular);
 
-	lightsource = Lightsource(Vertex(5, 0, 5, 1));
+	lightsource = Lightsource(Vertex(5, 0, 4.9, 1));
+
+	sphere2 = Sphere(Vertex(5, 2, -1, 1), 0.5, lightGreen, Surface::diffuse);
 }
 
 // Destructor
@@ -29,6 +30,10 @@ void Scene::intersection(Ray *ray)
 
 	//Sphere
 	sphere.rayIntersection(*ray);
+	sphere2.rayIntersection(*ray);
+
+	//Lightsource
+	//lightsource.rayInterSection(*ray);
 
 }
 
@@ -45,11 +50,9 @@ bool Scene::isIntersected(Ray *ray)
 	//Sphere
 	if (sphere.rayIntersection(*ray))
 		return true;
+	if (sphere2.rayIntersection(*ray))
+		return true;
+
 
 	return false;
-}
-
-Color Scene::getDiffuseLightContribution(const Vertex &point, const Direction &normal)
-{
-	return Color(0, 0, 0);
 }

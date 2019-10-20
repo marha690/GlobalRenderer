@@ -9,11 +9,12 @@ class Sphere
 public:
 	//Constructors & destructors
 	Sphere();
-	Sphere(Vertex _center, double _radius, Color _c);
+	Sphere(Vertex _center, double _radius, Color _c, Surface s);
 	~Sphere();
 
 	//Variables
 private:
+	Surface surface;
 	Vertex center;
 	double radius = 0.5;
 	Color color;

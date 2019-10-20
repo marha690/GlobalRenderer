@@ -43,5 +43,8 @@ public:
 
 	void setInternalPixelColors();
 
+
 	~Camera();
+private:
+	Color getColorForPixel(Pixel * p);
 };

@@ -2,6 +2,7 @@
 #include "Ray.h"
 #include "matrix_transform.hpp"
 #include "matrix_inverse.hpp"
+#include "gtx/rotate_vector.hpp"
 
 //Constructor
 Ray::Ray(Vertex _startPoint, Vertex _endPoint)
@@ -62,27 +63,21 @@ Ray* Ray::perfectBounce()
 Ray* Ray::randomBounce()
 {
 	//TODO. Doesn't work right now!
+	float randomAzimuth = 1;
+	float randomInclination = 1;
 
-//Define new coordinate system
-Direction Z = glm::normalize(hit->normal);
-Direction I = glm::normalize(Direction(getDirection().x, getDirection().y, getDirection().z));
-Direction IT = I - glm::dot(I, Z) * Z;
-Direction X = IT / glm::abs(IT);
-Direction Y = glm::cross(-X, Z);
+	Direction normal = glm::normalize(this->getHitData()->normal);
+	Direction helper = glm::vec3(normal) + glm::vec3(1, 1, 1);
 
-glm::mat4 Tr = glm::translate(glm::mat4(1.0), glm::vec3(getEnd().x, getEnd().y, getEnd().z));
+	Direction tangent = glm::normalize(glm::cross(normal, helper));
 
-//Local coordinates
-Vertex surfaceNormal = Vertex(0, 0, 1, 1);
-Vertex in = Tr * getDirection();
-Direction out = glm::reflect(in, surfaceNormal);
+	float inclination = acos(glm::sqrt(randomInclination));
+	float azimuth = 2 * CONSTANTS::PI * randomAzimuth;
 
-glm::mat3 inv = glm::inverse(Tr);
+	glm::vec3 randomDir = normal;
 
-//Global coordintes
-out = inv * out;
+	randomDir = glm::normalize(glm::rotate(randomDir, azimuth, glm::vec3(normal)));
+	randomDir = glm::normalize(glm::rotate(randomDir, inclination, glm::vec3(tangent)));
 
-double inclinationAngle = (glm::dot(in, surfaceNormal) / (in.length() * surfaceNormal.length()));
-Ray *ray = new Ray(getEnd(), Vertex(out,1) * 1000.0);
-return ray;
+	return new Ray(getEnd(), Vertex(randomDir,1) * 100.0);
 }
