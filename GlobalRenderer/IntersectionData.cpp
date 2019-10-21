@@ -3,13 +3,12 @@
 
 
 
-IntersectionData::IntersectionData(Vertex p, Direction n, Surface s)
+Surface::Surface(Direction n, SurfaceType s)
 {
 	normal = n;
-	point = p;
 	sufaceType = s;
 }
 
-IntersectionData::~IntersectionData()
+Surface::~Surface()
 {
 }

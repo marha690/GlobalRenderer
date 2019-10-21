@@ -10,7 +10,7 @@ Sphere::Sphere()
 	color = Color(251,251,251);
 }
 
-Sphere::Sphere(Vertex _center, double _radius, Color _c, Surface s)
+Sphere::Sphere(Vertex _center, double _radius, Color _c, SurfaceType s)
 {
 	radius = _radius;
 	center = _center;
@@ -37,13 +37,10 @@ bool Sphere::rayIntersection(Ray &r)
 {
 	Vertex o = r.getStart();
 	Vertex c = center;
-	Vertex l = r.getDirection();
+	Direction l = r.getDirection();
 
-	l = glm::normalize(l);
-
-	
 	Direction oc = o - c;
-	double b = 2.0f * glm::dot(l, Vertex(oc, 1));
+	double b = 2.0f * glm::dot(l, oc);
 	double ac = glm::dot((oc), (oc)) - (radius*radius);
 
 	double d = -(b / 2.0f);
@@ -56,36 +53,33 @@ bool Sphere::rayIntersection(Ray &r)
 	sqrtTerm = glm::sqrt(sqrtTerm);
 
 	double distance1 = d + sqrtTerm;
+	if (distance1 < CONSTANTS::EPSILON)
+		return false;
+
 	double distance2 = d - sqrtTerm;
+	if (distance2 < CONSTANTS::EPSILON)
+		return false;
 
-	Vertex hit1 = o + distance1 * l;
-	Vertex hit2 = o + distance2 * l;
+	Vertex hit1 = o + distance1 * Vertex(l,0);
+	Vertex hit2 = o + distance2 * Vertex(l,0);
 
-	//Ugly but works
-	if (distance1 > CONSTANTS::EPSILON && hit1.length() < hit2.length()) {
+	Vertex closestHit;
 
+	if (hit1.length() < hit2.length()) {
 		if ((r.getEnd() - r.getStart()).length() > hit1.length())
 			return false;
-
-		IntersectionData *data = new IntersectionData(hit1, glm::normalize(hit1 - center), Surface::specular);
-		r.setEnd(hit1);
-		r.setHitData(data);
-		r.setSurfaceType(surface);
-		r.setColor(this->color);
-		return true;
+		closestHit = hit1;
 	}
-	else if (distance2 > CONSTANTS::EPSILON) {
-
+	else {
 		if ((r.getEnd() - r.getStart()).length() > hit2.length())
 			return false;
-
-		IntersectionData *data = new IntersectionData(hit2, glm::normalize(hit2 - center), Surface::specular);
-		r.setEnd(hit2);
-		r.setHitData(data);
-		r.setSurfaceType(surface);
-		r.setColor(this->color);
-		return true;
+		closestHit = hit2;
 	}
 
-	return false;
+	Surface *data = new Surface(glm::normalize(closestHit - center), SurfaceType::Specular);
+	r.setEnd(closestHit);
+	r.setHitData(data);
+	r.setSurfaceType(surface);
+	r.setColor(this->color);
+	return true;
 }

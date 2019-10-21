@@ -4,7 +4,7 @@
 
 Pixel::Pixel()
 {
-	color = Color(10, 0, 10);
+	color = Color(0, 0, 0);
 }
 
 void Pixel::setColor(Color _color)

@@ -2,14 +2,13 @@
 
 #include "Definitions.h"
 
-class IntersectionData
+class Surface
 {
 public:
 	Direction normal;
-	Vertex point;
-	Surface sufaceType;
+	SurfaceType sufaceType;
 
-	IntersectionData(Vertex p, Direction n, Surface s);
-	~IntersectionData();
+	Surface(Direction n, SurfaceType s);
+	~Surface();
 };
 

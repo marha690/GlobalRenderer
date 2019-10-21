@@ -94,20 +94,9 @@ void Camera::setInternalPixelColors()
 	}
 }
 
-Color Camera::getColorForPixel(Pixel *p) {
+Color Camera::getColorForPixel(Pixel *p) 
+{
+	return p->ray->getColor();
 
-	Color pixelColor = Color(0, 0, 0);
-
-	//Retrieve value from ray to give the pixel its color.
-	Ray *temp = p->ray;
-
-	//Get last ray in the tree.
-	while (temp->reflectedRay) {
-		temp = temp->reflectedRay;
-	}
-	pixelColor = temp->getColor(); //Get the color of the last ray.
-
-
-	return pixelColor;
 }
 

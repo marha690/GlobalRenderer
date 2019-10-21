@@ -16,30 +16,19 @@ public:
 	~Ray();
 
 	//Variables.
-public:
-	//Tree
-	Ray *refractedRay = nullptr;
-	Ray *reflectedRay = nullptr;
-	Ray *parent = nullptr;
-	double importance = 0;
-	double radiance = 0;
-
 private:
 	Vertex start;
 	Vertex end;
 	Color color;
-	IntersectionData *hit = nullptr;
-
+	Surface *hit = nullptr;
 
 
 	//Setters
 public:
 	void setEnd(Vertex _end) { end = _end;}
-	void setHitData(IntersectionData *d) { hit = d; }
+	void setHitData(Surface *d) { hit = d; }
 	void setColor(Color c) { color = c; }
-	void setSurfaceType(Surface s);
-private:
-	void setStart(Vertex _start) { start = _start; }
+	void setSurfaceType(SurfaceType s);
 
 	//Getters
 public:
@@ -47,7 +36,7 @@ public:
 	Vertex getStart() { return start; }
 	Vertex getDirection() { return glm::normalize(end - start); }
 	Color getColor() { return color; }
-	IntersectionData* getHitData() { return hit; }
+	Surface* getHitData() { return hit; }
 
 	//Other Functions
 public:

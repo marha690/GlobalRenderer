@@ -3,8 +3,6 @@
 #ifndef DEFINITIONS
 #define DEFINITIONS
 
-
-
 #include <glm.hpp>
 #include <vec3.hpp>
 #include <vec4.hpp>
@@ -14,23 +12,19 @@
 namespace CONSTANTS {
 	const double	PI = 3.1415f;
 	const double	EPSILON = 0.0000001;
-	const int		DEPTH = 5;
-	const int   screenSize_X = 800;
-	const int   screenSize_Y = 800;
+	const int		screenSize_X = 600;
+	const int		screenSize_Y = 600;
+	const double	RAY_ABSOPTIONRATE = 0.4; //Between 0 and 1.
+	const double	IMPORTANCE_SCALAR = 0.3; //Between 0 and 1.
 }
 
-enum Surface {
-	diffuse,
-	specular,
-	transparent
+enum SurfaceType {
+	Lambertian,
+	Specular
 };
-
 
 using Color = glm::dvec3;
 using Vertex = glm::dvec4;
 using Direction = glm::dvec3;
-/*
-Use this if i want to remove my own vertex class.
-*/
 
 #endif // DEFINITIONS

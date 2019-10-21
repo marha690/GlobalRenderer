@@ -31,7 +31,7 @@ bool Tetrahedron::rayIntersection(Ray &r) {
 
 	for (int i = 0; i < 4; i++) {
 		if (triangles[i].rayIntersection(r)) {
-			r.setSurfaceType(Surface::specular);
+			r.setSurfaceType(SurfaceType::Specular);
 			hit = true;
 		}
 	}

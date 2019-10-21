@@ -68,7 +68,7 @@ bool Room::rayIntersection(Ray &r) {
 
 	for (int i = 0; i < 24; i++) {
 		if (room[i].rayIntersection(r)) {
-			r.setSurfaceType(Surface::diffuse);
+			r.setSurfaceType(SurfaceType::Lambertian);
 			hit = true;
 		}
 	}

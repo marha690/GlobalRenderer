@@ -18,15 +18,11 @@ Ray::Ray(Vertex _startPoint, Vertex _endPoint)
 //Destructor
 Ray::~Ray()
 {
-	if (reflectedRay)
-		delete reflectedRay;
-
-	if (refractedRay)
-		delete refractedRay;
+	delete hit;
 }
 
 
-void Ray::setSurfaceType(Surface s)
+void Ray::setSurfaceType(SurfaceType s)
 {
 	hit->sufaceType = s;
 }
@@ -38,14 +34,6 @@ void Ray::print() {
 void Ray::printRayTree()
 {
 	print();
-
-	if (reflectedRay) {
-		reflectedRay->printRayTree();
-	}
-
-	if (refractedRay) {
-		refractedRay->printRayTree();
-	}
 }
 
 
@@ -64,7 +52,6 @@ Ray* Ray::perfectBounce()
 
 Ray* Ray::randomBounce()
 {
-	//TODO. Doesn't work right now!
 	std::uniform_real_distribution<double> rand(0.0, 1.0);
 
 	float fMin = 0.0;
@@ -74,17 +61,16 @@ Ray* Ray::randomBounce()
 	float f2 = (float)std::rand() / RAND_MAX;
 	float random2 = fMin + f2 * (fMax - fMin);
 
-
-	float randomAzimuth = random1;//rand(std::default_random_engine);
+	float randomAzimuth = random1;
 	float randomInclination = random2;
 
-	Direction normal = glm::normalize(this->getHitData()->normal);
+	Direction normal = this->getHitData()->normal;
 	Direction helper = glm::vec3(normal) + glm::vec3(1, 1, 1);
 
 	Direction tangent = glm::normalize(glm::cross(normal, helper));
 
 	float inclination = acos(glm::sqrt(randomInclination));
-	float azimuth = 2 * CONSTANTS::PI * randomAzimuth;
+	float azimuth = 2 * (float)CONSTANTS::PI * randomAzimuth;
 
 	glm::vec3 randomDir = normal;
 

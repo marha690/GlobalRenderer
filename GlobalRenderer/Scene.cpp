@@ -16,11 +16,11 @@ Scene::Scene()
 
 	tetrahedron = Tetrahedron(Vertex(5, 2, 0, 1), lightRed);
 
-	sphere = Sphere(Vertex(4, -2, -2, 1), 1.5, lightGreen, Surface::specular);
+	sphere = Sphere(Vertex(4, -2, -2, 1), 1.5, lightGreen, SurfaceType::Specular);
 
 	lightsource = Lightsource(Vertex(5, 0, 4.9, 1));
 
-	sphere2 = Sphere(Vertex(5, 2, -1, 1), 0.5, lightGreen, Surface::diffuse);
+	sphere2 = Sphere(Vertex(5, 2, -1, 1), 0.5, lightGreen, SurfaceType::Lambertian);
 }
 
 // Destructor
@@ -65,75 +65,63 @@ bool Scene::isIntersected(Ray *ray)
 	return false;
 }
 
-
+//Recursion for the ray tree, return the color from that ray.
 Color Scene::tracePath(Ray *ray) 
 {
 	Color black = Color(0, 0, 0);
 
 	intersection(ray);
 
+	//Fail save for the bug where the ray does not hit a surface.
 	if (!ray->getHitData())
 		return black;
 
-	
-	if (ray->getHitData()->sufaceType == Surface::specular) {
-		//Specular
-
+	switch (ray->getHitData()->sufaceType)
+	{
+	case SurfaceType::Specular:
 		return tracePath(ray->perfectBounce());
+		break;
 
+	case SurfaceType::Lambertian:
 
-	}
-	else if(ray->getHitData()->sufaceType == Surface::diffuse) {
-		//Labertian
+		Color color = Color(0.0);
 
-		Color color = ray->getColor();
-
-		//Absorbtion change of the surface. 0.5
-		//Importance = 0.3
 		std::random_device randomDevice;
 		std::default_random_engine gen(randomDevice());
 		std::uniform_real_distribution<> dis(0.0, 1.0);
 
-
-		//makes half the rays beeing absorbed.
-		if (dis(gen) > 0.5) {
+		if (dis(gen) > CONSTANTS::RAY_ABSOPTIONRATE) {
 			color = tracePath(ray->randomBounce());
-			color *= 0.4;  //Importance scalar.
+			color *= CONSTANTS::IMPORTANCE_SCALAR;
 		}
 
-		//Shadow sample rays
-		for (int i = 0; i < 2; i++)
+		//Shadow rays. Give the ray color if the surface is lit.
+		int shadowRays = 2;
+		for (int i = 0; i < shadowRays; i++)
 		{
 			Ray *shadowRay = new Ray(ray->getEnd(), lightsource.getRandomPoint());
 
-			if (isIntersected(shadowRay))
-				continue;
+			if (!isIntersected(shadowRay)) {
+				double p = 0.8; //Between 0 and 1.
+				double BRDF = p / CONSTANTS::PI;
 
+				Direction light = glm::normalize(Direction(shadowRay->getDirection()));
+				Direction normal = glm::normalize(ray->getHitData()->normal);
 
-			double p = 0.8; //Between 0 and 1.
-			double BRDF = p / CONSTANTS::PI;
+				double cosAngle = glm::dot(light, normal);
 
-			Direction light = glm::normalize(Direction(shadowRay->getDirection()));
-			Direction normal = glm::normalize(ray->getHitData()->normal);
+				if (cosAngle < 0)
+					cosAngle = 0;
 
-			double cosAngle = glm::dot(light, normal);
-
-			if (cosAngle < 0)
-				cosAngle = 0;
-
-			double L = BRDF * cosAngle;
-
-			color += L * lightsource.L0 * ray->getColor();
+				double L = BRDF * cosAngle;
+				color += L * lightsource.L0 * ray->getColor();
+			}
+			delete shadowRay;
 		}
 		return color;
-	}
-	else
-	{
-		std::cout << "OOPSIE! YOU SHOULD NOT SEE THIS MESSAGE :S\n";
-		return black;
+		break;
 	}
 
-
-	return black; //Not reachable.
+	return black;
 }
 
