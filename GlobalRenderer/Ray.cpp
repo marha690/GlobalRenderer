@@ -4,6 +4,8 @@
 #include "matrix_inverse.hpp"
 #include "gtx/rotate_vector.hpp"
 
+#include <random>
+
 //Constructor
 Ray::Ray(Vertex _startPoint, Vertex _endPoint)
 {
@@ -63,8 +65,18 @@ Ray* Ray::perfectBounce()
 Ray* Ray::randomBounce()
 {
 	//TODO. Doesn't work right now!
-	float randomAzimuth = 1;
-	float randomInclination = 1;
+	std::uniform_real_distribution<double> rand(0.0, 1.0);
+
+	float fMin = 0.0;
+	float fMax = 1.0;
+	float f1 = (float)std::rand() / RAND_MAX;
+	float random1 = fMin + f1 * (fMax - fMin);
+	float f2 = (float)std::rand() / RAND_MAX;
+	float random2 = fMin + f2 * (fMax - fMin);
+
+
+	float randomAzimuth = random1;//rand(std::default_random_engine);
+	float randomInclination = random2;
 
 	Direction normal = glm::normalize(this->getHitData()->normal);
 	Direction helper = glm::vec3(normal) + glm::vec3(1, 1, 1);
@@ -76,6 +88,7 @@ Ray* Ray::randomBounce()
 
 	glm::vec3 randomDir = normal;
 
+	//Problems with rotate, it needs float input for vectors. Mine are of type double :(
 	randomDir = glm::normalize(glm::rotate(randomDir, azimuth, glm::vec3(normal)));
 	randomDir = glm::normalize(glm::rotate(randomDir, inclination, glm::vec3(tangent)));
 

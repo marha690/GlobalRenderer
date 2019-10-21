@@ -16,7 +16,8 @@ public:
 public:
 	Color color;
 	Vertex position;
-	double L0 = 10;
+	double L0 = 255;
+	double sideLength = 1;
 private:
 	Vertex v0, v1, v2, v3;
 	Triangle triangles[2];
@@ -26,5 +27,6 @@ private:
 	//Functions
 public:
 	bool rayInterSection(Ray &ray);
+	Vertex getRandomPoint();
 };
 

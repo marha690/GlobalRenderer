@@ -33,6 +33,10 @@ public:
 	bool isIntersected(Ray *ray);
 
 
+	Color tracePath(Ray * ray);
+
+
+
 private:
 	Color white = Color(255, 255, 255);
 	Color black = Color(2, 2, 2);

@@ -28,67 +28,22 @@ Camera::Camera(int pxX, int pxY, Eye eye = Eye::EYE_ONE)
 Camera::~Camera() {
 }
 
+
+
 void Camera::render(Scene *s)
 {
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
 
-			//First ray!
 			Ray *ray = createPixelRay(x, y); //Create rays for the pixel.
-			s->intersection(ray); 
-
-
-
-			if (ray->getHitData()) {
-				Ray *temp = ray;
-
-				//Specular surface!
-				int c = 0; //Simple way to stop rays from being infinitive amount.
-				while (ray->getHitData() && ray->getHitData()->sufaceType == Surface::specular && c < 5) {
-					
-					ray->reflectedRay = ray->perfectBounce();
-					s->intersection(ray->reflectedRay);
-
-
-					ray = ray->reflectedRay;
-					ray->parent = temp;
-					temp = ray;
-					c++;
-				}
-				
-
-
-				//We have found our rays. Make a shadow ray for the last hit.
-				Ray *shadowRay = new Ray(temp->getEnd(), s->lightsource.position);
-				if (s->isIntersected(shadowRay)) {
-					temp->setColor(Color(0, 0, 0));
-				} 
-				else {
-
-					//Make Lambertian reflection?
-
-					double p = 0.6; //Between 0 and 1.
-					double BRDF = p / CONSTANTS::PI;
-
-					Direction light = glm::normalize(Direction(shadowRay->getDirection()));
-					Direction normal = glm::normalize(temp->getHitData()->normal);
-
-					double cosAngle = glm::dot(light, normal);
-
-					if (cosAngle < 0)
-						cosAngle = 0;
-
-					double L = BRDF * s->lightsource.L0 * cosAngle;
-					//std::cout << "Angle: " << cosAngle << std::endl;
-					temp->setColor(temp->getColor() * L);
-				}
-			}
+			ray->setColor(s->tracePath(ray));
 
 		}
 		std::cout << "\rProgress: " << (y / (pixelsVericaly / 100)) << "%";
 	}
-		std::cout << "\rProgress: 100%\n";
+	std::cout << "\rProgress: 100%\n";
 }
+
 
 //Connects pixel with the rays which is projected inside it.
 Ray* Camera::createPixelRay(int x, int y) 
@@ -150,18 +105,9 @@ Color Camera::getColorForPixel(Pixel *p) {
 	while (temp->reflectedRay) {
 		temp = temp->reflectedRay;
 	}
-
-
 	pixelColor = temp->getColor(); //Get the color of the last ray.
-
-	////Adds a small diffuse thing to every ray.
-	//while (temp->parent) {
-	//	temp = temp->parent;
-
-	//	pixelColor = pixelColor + temp->getColor() * 0.03;
-	//}
-
 
 
 	return pixelColor;
 }
+

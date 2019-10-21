@@ -45,7 +45,7 @@ private:
 public:
 	Vertex getEnd() { return end; }
 	Vertex getStart() { return start; }
-	Vertex getDirection() { return (end - start); }
+	Vertex getDirection() { return glm::normalize(end - start); }
 	Color getColor() { return color; }
 	IntersectionData* getHitData() { return hit; }
 

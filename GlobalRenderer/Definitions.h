@@ -12,7 +12,7 @@
 #include <mat4x4.hpp>
 
 namespace CONSTANTS {
-	const double	PI = 3.1415;
+	const double	PI = 3.1415f;
 	const double	EPSILON = 0.0000001;
 	const int		DEPTH = 5;
 	const int   screenSize_X = 800;
