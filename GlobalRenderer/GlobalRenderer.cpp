@@ -102,7 +102,7 @@ int main()
 
 	camera.render(&scene);
 
-	camera.setInternalPixelColors();
+	//camera.setInternalPixelColors();
 
 	setImagePixels(image, camera,0, camera.maxColorValue());
 	std::cout << "Max color value in the scene:" << camera.maxColorValue() << "\n";

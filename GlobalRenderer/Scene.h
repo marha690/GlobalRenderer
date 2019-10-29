@@ -34,6 +34,7 @@ public:
 
 
 	Color tracePath(Ray * ray);
+	Color tracePath(Ray * ray, int depth);
 
 
 

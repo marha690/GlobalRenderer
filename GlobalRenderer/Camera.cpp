@@ -3,11 +3,6 @@
 
 #include <cmath>
 
-#include <glm.hpp>
-#include <vec3.hpp>
-#include <vec4.hpp>
-#include <mat4x4.hpp>
-#include <matrix_transform.hpp>
 
 Camera::Camera(int pxX, int pxY, Eye eye = Eye::EYE_ONE)
 {
@@ -29,15 +24,21 @@ Camera::~Camera() {
 }
 
 
-
 void Camera::render(Scene *s)
 {
 	for (int y = 0; y < pixelsVericaly; y++) {
 		for (int x = 0; x < pixelsHorizontaly; x++) {
 
-			Ray *ray = createPixelRay(x, y); //Create rays for the pixel.
-			ray->setColor(s->tracePath(ray));
+			Pixel *p = &pixels[x + pixelsVericaly * y];
+			Color c = Color(0.0);
 
+			createPixelRays(x, y, CONSTANTS::RAYS_PER_PIXEL); //Create rays for the pixels.
+
+			for (unsigned int i = 0; i < CONSTANTS::RAYS_PER_PIXEL; i++) {
+				c += (s->tracePath(p->rays.at(i))); //Follow the ray out in the scene.
+			}
+
+			p->color = c; //Set the color for the pixel.
 		}
 		std::cout << "\rProgress: " << (y / (pixelsVericaly / 100)) << "%";
 	}
@@ -45,23 +46,31 @@ void Camera::render(Scene *s)
 }
 
 
-//Connects pixel with the rays which is projected inside it.
-Ray* Camera::createPixelRay(int x, int y) 
+void Camera::createPixelRays(int x, int y, int n)
 {
 	double pixelWidth = (double(viewWidth) / double(pixelsHorizontaly));
 	double pixelHeight = (double(viewHeight) / double(pixelsVericaly));
 
-	Vertex pixelPosition = Vertex( 0, (viewWidth / 2) - x*pixelWidth, (viewHeight / 2) - y*pixelHeight, 1);
+	Vertex pixelPosition = Vertex(0, (viewWidth / 2) - x * pixelWidth, (viewHeight / 2) - y * pixelHeight, 1);
 
-	//Create ray for the pixel
-	Ray *myRay = new Ray(startPosition, pixelPosition);
-	Vertex end = glm::normalize(myRay->getDirection());
-	myRay->setEnd( end *= 1000);
+	int subN = n / 2;
+	double rayStepsH = pixelWidth / subN;
+	double rayStepsV = pixelHeight / subN;
 
-	//Connect the ray to that pixel.
-	pixels[x + pixelsVericaly * y].connectRay(myRay);
-	return myRay;
+	for (int i = 0; i < subN; i++)
+	{
+		for (int j = 0; j < subN; j++)
+		{
+			Vertex rayPos = pixelPosition + Vertex(0, j * rayStepsH, i * rayStepsV, 1);
+			Ray *ray = new Ray(startPosition, rayPos);
+			ray->setEnd(ray->getDirection() *= 1000); //ugly
+
+			pixels[x + pixelsVericaly * y].rays.push_back(ray);
+		}
+	}
 }
+
+
 
 double Camera::maxColorValue()
 {
@@ -81,22 +90,4 @@ double Camera::maxColorValue()
 	return max;
 }
 
-//Set pixels color from the pixel-rays interpolated colors.
-void Camera::setInternalPixelColors()
-{
-	for (int y = 0; y < pixelsVericaly; y++) {
-		for (int x = 0; x < pixelsHorizontaly; x++) {
-
-			Pixel *p = &pixels[x + pixelsVericaly * y];
-
-			p->color = getColorForPixel(p);
-		}
-	}
-}
-
-Color Camera::getColorForPixel(Pixel *p) 
-{
-	return p->ray->getColor();
-
-}
 

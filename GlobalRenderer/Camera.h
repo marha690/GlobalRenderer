@@ -37,7 +37,6 @@ public:
 
 	void render(Scene *s);
 
-	Ray* createPixelRay(int x, int y);
 
 	double maxColorValue();
 
@@ -46,5 +45,6 @@ public:
 
 	~Camera();
 private:
-	Color getColorForPixel(Pixel * p);
+	void createPixelRays(int x, int y, int n);
 };
+

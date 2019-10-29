@@ -4,6 +4,9 @@
 #include "Definitions.h"
 #include "SFML/Graphics.hpp"
 
+
+#include <vector>
+
 class Ray;
 class Triangle;
 
@@ -12,6 +15,7 @@ class Pixel
 public:
 
 	//Variables
+	std::vector<Ray*>rays;
 	Ray *ray;
 	Color color;
 
@@ -22,6 +26,6 @@ public:
 
 	Pixel();
 
-	~Pixel() { delete ray; }
+	~Pixel() {  }
 
 };

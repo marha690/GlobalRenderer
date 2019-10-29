@@ -18,7 +18,7 @@ Scene::Scene()
 
 	sphere = Sphere(Vertex(4, -2, -2, 1), 1.5, lightGreen, SurfaceType::Specular);
 
-	lightsource = Lightsource(Vertex(5, 0, 4.9, 1));
+	lightsource = Lightsource(Vertex(5, 0, 5, 1));
 
 	sphere2 = Sphere(Vertex(5, 2, -1, 1), 0.5, lightGreen, SurfaceType::Lambertian);
 }
@@ -69,7 +69,6 @@ bool Scene::isIntersected(Ray *ray)
 Color Scene::tracePath(Ray *ray) 
 {
 	Color black = Color(0, 0, 0);
-
 	intersection(ray);
 
 	//Fail save for the bug where the ray does not hit a surface.
@@ -90,20 +89,21 @@ Color Scene::tracePath(Ray *ray)
 		std::default_random_engine gen(randomDevice());
 		std::uniform_real_distribution<> dis(0.0, 1.0);
 
+		double p = 0.8; //Between 0 and 1.
+		double BRDF = p / CONSTANTS::PI;
+
 		if (dis(gen) > CONSTANTS::RAY_ABSOPTIONRATE) {
 			color = tracePath(ray->randomBounce());
 			color *= CONSTANTS::IMPORTANCE_SCALAR;
 		}
 
 		//Shadow rays. Give the ray color if the surface is lit.
-		int shadowRays = 2;
+		int shadowRays = 3;
 		for (int i = 0; i < shadowRays; i++)
 		{
 			Ray *shadowRay = new Ray(ray->getEnd(), lightsource.getRandomPoint());
 
 			if (!isIntersected(shadowRay)) {
-				double p = 0.8; //Between 0 and 1.
-				double BRDF = p / CONSTANTS::PI;
 
 				Direction light = glm::normalize(Direction(shadowRay->getDirection()));
 				Direction normal = glm::normalize(ray->getHitData()->normal);
@@ -124,4 +124,5 @@ Color Scene::tracePath(Ray *ray)
 
 	return black;
 }
+
 

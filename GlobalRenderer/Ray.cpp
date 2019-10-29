@@ -18,7 +18,8 @@ Ray::Ray(Vertex _startPoint, Vertex _endPoint)
 //Destructor
 Ray::~Ray()
 {
-	delete hit;
+	if (hit)
+		delete hit;
 }
 
 
