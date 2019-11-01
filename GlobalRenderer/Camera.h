@@ -40,11 +40,11 @@ public:
 
 	double maxColorValue();
 
-	void setInternalPixelColors();
 
 
 	~Camera();
 private:
-	void createPixelRays(int x, int y, int n);
+	//Returns the color from the rays.
+	Color createPixelRays(int x, int y, Scene *s);
 };
 

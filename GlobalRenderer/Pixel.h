@@ -15,17 +15,12 @@ class Pixel
 public:
 
 	//Variables
-	std::vector<Ray*>rays;
-	Ray *ray;
 	Color color;
 
 	void setColor(Color _color);
-	void connectRay(Ray *_ray);
-
 	Color getColor() { return color; }
 
 	Pixel();
-
-	~Pixel() {  }
+	~Pixel() = default;
 
 };

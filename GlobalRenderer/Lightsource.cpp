@@ -18,24 +18,20 @@ Lightsource::Lightsource(Vertex pos)
 	triangles[1] = Triangle(v1, v2, v3, whiteLight);
 }
 
-
-
 bool Lightsource::rayInterSection(Ray & ray)
 {
-	if (triangles[0].rayIntersection(ray) || triangles[0].rayIntersection(ray)) {
-		ray.setColor(whiteLight);
+	if (triangles[0].rayIntersection(ray) || triangles[1].rayIntersection(ray)) {
+		ray.setSurfaceType(SurfaceType::Light);
 		return true;
 	}
 
 	return false;
 }
 
-
-
 Vertex Lightsource::getRandomPoint()
 {
 	std::random_device rd;
-	std::mt19937 gen(rd());
+	std::default_random_engine gen(rd());
 	std::uniform_real_distribution<> dis(0.0, 1.0);
 
 	double halfLength = sideLength / 2.0;
@@ -46,8 +42,6 @@ Vertex Lightsource::getRandomPoint()
 	
 	return point;
 }
-
-
 
 Lightsource::~Lightsource()
 {

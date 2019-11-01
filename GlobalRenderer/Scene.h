@@ -30,27 +30,12 @@ public:
 	//Intersection
 	void intersection(Ray *ray);
 
+	//Return true if something intersects. Usefull for shadow rays.
 	bool isIntersected(Ray *ray);
 
-
 	Color tracePath(Ray * ray);
-	Color tracePath(Ray * ray, int depth);
-
-
 
 private:
-	Color white = Color(255, 255, 255);
-	Color black = Color(2, 2, 2);
-
-	Color green = Color(0, 155, 0);
-	Color lightGreen = Color(0, 255, 0);
-	Color blue = Color(0, 0, 155);
-	Color lightBlue = Color(0, 0, 255);
-	Color red = Color(155, 0, 0);
-	Color lightRed = Color(255, 0, 0);
-
-	Color pink = Color(255, 192, 203);
-	Color cyan = Color(153, 230, 179);
-	Color sponge = Color(253, 254, 3);
-	Color mossgreen = Color(53, 94, 59);
+	Color getLightContribution(Vertex rayEnd, Direction surfaceNormal);
 };
+

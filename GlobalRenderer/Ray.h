@@ -41,11 +41,9 @@ public:
 	//Other Functions
 public:
 	void print();
-	void printRayTree();
 	friend std::ostream& operator<<(std::ostream& os, const Ray& v);
 
-	Ray* perfectBounce();
-
-	Ray * randomBounce();
+	Ray perfectBounce();
+	Ray randomBounce();
 
 };

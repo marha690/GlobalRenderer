@@ -17,12 +17,12 @@ public:
 	Color color;
 	Vertex position;
 	double L0 = 255;
-	double sideLength = 1;
 private:
+	double sideLength = 1;
 	Vertex v0, v1, v2, v3;
 	Triangle triangles[2];
-
 	Color whiteLight = Color(L0, L0, L0);
+
 	
 	//Functions
 public:

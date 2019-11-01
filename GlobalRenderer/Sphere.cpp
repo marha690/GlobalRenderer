@@ -7,7 +7,7 @@
 Sphere::Sphere()
 {
 	center = Vertex(0,0,0,1);
-	color = Color(251,251,251);
+	color = COLOR::WHITE;
 }
 
 Sphere::Sphere(Vertex _center, double _radius, Color _c, SurfaceType s)
