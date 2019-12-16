@@ -44,6 +44,6 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const Ray& v);
 
 	Ray perfectBounce();
+	Ray refractedBounce();
 	Ray randomBounce();
-
 };

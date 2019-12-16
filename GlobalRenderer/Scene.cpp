@@ -14,7 +14,7 @@ Scene::Scene()
 
 	lightsource = Lightsource(Vertex(5, 0, 4.9999f, 1));
 
-	sphere2 = Sphere(Vertex(5, 2, -2, 1), 1, COLOR::RED, SurfaceType::Lambertian);
+	sphere2 = Sphere(Vertex(5, 2, -2, 1), 1, COLOR::RED, SurfaceType::Transparent);
 }
 
 // Destructor
@@ -64,12 +64,11 @@ bool Scene::isIntersected(Ray *ray)
 //Recursion for the ray tree, return the color from that ray.
 Color Scene::tracePath(Ray *ray) 
 {
-	Color black = COLOR::BLACK;
 	intersection(ray);
 
 	//Fail save for the bug where the ray does not hit a surface.
 	if (!ray->getHitData())
-		return black;
+		return COLOR::BLACK;
 
 	switch (ray->getHitData()->sufaceType)
 	{
@@ -109,43 +108,28 @@ Color Scene::tracePath(Ray *ray)
 				if (lightAngle < 0)
 					lightAngle = 0;
 
-				color += BRDF * lightAngle * ray->getColor() * lightsource.color /  (double)CONSTANTS::SHADOW_RAYS;
+				// Render equation.
+				color += BRDF * lightAngle * (ray->getColor() * 0.01) * lightsource.color /  (double)CONSTANTS::SHADOW_RAYS;
 			}
 		}
 
 		return color;
 		break;
 	}
+	case SurfaceType::Transparent:
+	{
+		//Reflected and refracted ray.
+		return 0.5 * tracePath(&ray->perfectBounce()) + tracePath(&ray->refractedBounce());
+		break;
+	}
 	case SurfaceType::Light:
 	{
-		//return ray->getColor();
-		return Color(32222); //Ugly implementation to increase light value.
+		return ray->getColor();
 		break;
 	}
 	default:
 		break;
 	}
 
-	return black;
-}
-
-
-//test
-Color Scene::getLightContribution(Vertex rayEnd, Direction surfaceNormal) {
-
-	Color color{ COLOR::BLACK };
-
-	int hit = 0;
-	//Shadow rays. Give the ray color if the surface is lit.
-	for (int i = 0; i < CONSTANTS::SHADOW_RAYS; i++)
-	{
-		Ray shadowRay = Ray(rayEnd, lightsource.getRandomPoint());
-
-		if (!isIntersected(&shadowRay)) {
-			++hit;
-		}
-	}
-	double scalar = hit / CONSTANTS::SHADOW_RAYS;
-
-	return color;
+	return COLOR::BLACK;
 }

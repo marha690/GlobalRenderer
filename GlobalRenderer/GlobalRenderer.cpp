@@ -1,5 +1,5 @@
 // Course: TNCG15, Advanced global illumination and rendering
-// Date: 2019-09-26
+// Date: 2019-09-26 - 2019-12-16
 // Author: Martin Hag
 
 #include "pch.h"
@@ -53,6 +53,22 @@ sf::Color toSFLinear(Color c, double min, double max ) {
 }
 
 
+sf::Color toSFLog(Color c, double min, double max) {
+
+	//Normalize colors
+	double red = log(c.r - min) / log(max); //Norm between 0 and 1.
+	double green = log(c.g - min) / log(max); //Norm between 0 and 1.
+	double blue = log(c.b - min) / log(max); //Norm between 0 and 1.
+
+	//Make them to range between 0 and 255 (8bits since sf::Color has 8bits color-input).
+	red *= 255;
+	green *= 255;
+	blue *= 255;
+
+	return sf::Color((int)red, (int)green, (int)blue);
+}
+
+
 //updates window.
 void updateWindow(sf::RenderWindow &_window, sf::Sprite &_sprite, sf::Texture &_texture, sf::Image &_image)
 {
@@ -68,7 +84,7 @@ void setImagePixels(sf::Image &_image, Camera &camera, double min, double max)
 		for (int x = 0; x < CONSTANTS::screenSize_X; x++) {
 			Color internalColor = camera.pixels[x + CONSTANTS::screenSize_Y* y].color;
 
-			sf::Color color = toSFLinear(internalColor, 0, max);
+			sf::Color color = toSFLinear(internalColor, 0, max); // convert colors in schene to 8bits
 			_image.setPixel(x, y, color);
 		}
 	}

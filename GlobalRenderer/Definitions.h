@@ -12,10 +12,10 @@ namespace CONSTANTS {
 	const double	PI = 3.1415f;
 	const double	EPSILON = 0.0000001;
 
-	const int		screenSize_X = 300; // Min: 100
-	const int		screenSize_Y = 300;
+	const int		screenSize_X = 400; // Min: 100
+	const int		screenSize_Y = 400;
 
-	const int		RAYS_PER_PIXEL = 4; //All other values than 2 and 3.
+	const int		RAYS_PER_PIXEL = 20; //All other values than 2 and 3.
 	const int		SHADOW_RAYS = 1;
 	const double	INITAL_LENGTH = 1000; //The length rays get when created. 
 
@@ -27,6 +27,7 @@ namespace CONSTANTS {
 enum SurfaceType {
 	Lambertian,
 	Specular,
+	Transparent,
 	Light
 };
 

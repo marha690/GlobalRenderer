@@ -3,6 +3,7 @@
 #include "matrix_transform.hpp"
 #include "matrix_inverse.hpp"
 #include "gtx/rotate_vector.hpp"
+#include "gtx/vector_angle.hpp"
 
 #include <random>
 
@@ -46,6 +47,29 @@ Ray Ray::perfectBounce()
 	return Ray(end, Vertex(out,0) * CONSTANTS::INITAL_LENGTH);
 }
 
+
+Ray Ray::refractedBounce()
+{
+	Direction out = glm::reflect(getDirection(), Vertex(hit->normal, 0));
+	//Refraction indexes. Implement this inside material class leter.
+	double n1 = 1;
+	double n2 = 1.3;
+	double refractionIndex = n1 / n2;
+	Vertex normal = glm::normalize( Vertex( this->getHitData()->normal,0) );
+
+	double alpha = glm::angle(getDirection(), normal );
+	double beta = refractionIndex * alpha;
+
+	double dotNI = glm::dot(normal, getDirection());
+
+	Direction T = refractionIndex * getDirection()
+		+ normal*(-refractionIndex * dotNI
+		- sqrt(1 - refractionIndex * refractionIndex * (1 - dotNI * dotNI)) );
+
+	return Ray(end, Vertex(T, 0) * CONSTANTS::INITAL_LENGTH);
+}
+
+
 Ray Ray::randomBounce()
 {
 	std::uniform_real_distribution<double> rand(0.0, 1.0);
@@ -72,3 +96,4 @@ Ray Ray::randomBounce()
 
 	return Ray(getEnd(), Vertex(randomDir,1) * CONSTANTS::INITAL_LENGTH);
 }
+
