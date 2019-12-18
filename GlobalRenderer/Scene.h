@@ -18,6 +18,7 @@ public:
 	Tetrahedron tetrahedron;
 	Sphere sphere;
 	Sphere sphere2;
+	Sphere sphere3;
 	Lightsource lightsource;
 	Room room;
 
