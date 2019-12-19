@@ -48,18 +48,14 @@ Ray Ray::perfectBounce()
 }
 
 
-Ray Ray::refractedBounce()
+Ray Ray::refractedBounce(double refractionIndex)
 {
-
-	//Refraction indexes. Implement this inside material class leter.
-	double n1 = 1;
-	double n2 = 1;
-	double refractionIndex = n1 / n2;
-
+	// Might not work
 	Vertex normal = glm::normalize( Vertex( this->getHitData()->normal,0) );
+	Vertex dir = -getDirection();
 
-	double dotNI = glm::dot(normal, getDirection());
-	Direction T = refractionIndex * getDirection()
+	double dotNI = glm::dot(normal, dir);
+	Direction T = refractionIndex * dir
 		+ normal*(-refractionIndex * dotNI
 		- sqrt(1 - refractionIndex * refractionIndex * (1 - dotNI * dotNI)) );
 

@@ -36,7 +36,5 @@ public:
 
 	Color tracePath(Ray * ray);
 
-private:
-	Color getLightContribution(Vertex rayEnd, Direction surfaceNormal);
 };
 

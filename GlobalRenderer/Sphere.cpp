@@ -76,7 +76,7 @@ bool Sphere::rayIntersection(Ray &r)
 		closestHit = hit2;
 	}
 
-	Surface *data = new Surface(glm::normalize(closestHit - center), SurfaceType::Specular);
+	Surface *data = new Surface(glm::normalize(closestHit - center), surface);
 	r.setEnd(closestHit);
 	r.setHitData(data);
 	r.setSurfaceType(surface);
